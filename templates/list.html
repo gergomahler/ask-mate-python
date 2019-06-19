@@ -2,9 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Askmate | Main page</title>
 </head>
 <body>
+
+    <h1>Askmate</h1>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Question</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for question in questions %}
+            <tr>
+                <td>{{ question.submission_time }}</td>
+                <td>{{ question.title }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
 
 </body>
 </html>

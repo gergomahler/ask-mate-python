@@ -16,7 +16,7 @@ def main_page():
 def add_question():
     if request.method == 'GET':
         return render_template('add-question.html')
-    else:
+    elif request.method == 'POST':
         question_id = data_manager.add_new_question(request.form)
         return redirect('/question/{{ question_id }}')
 

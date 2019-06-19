@@ -2,9 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Question</title>
 </head>
 <body>
+
+    <h1>{{ question.title }}</h1>
+
+    <a href="/">Home page</a>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Time</th>
+                <th>Views</th>
+                <th>Votes</th>
+                <th>Message</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>{{ question.id }}</td>
+                <td>{{ question.submisson_time }}</td>
+                <td>{{ question.view_number }}</td>
+                <td>{{ question.vote_number }}</td>
+                <td>{{ question.message }}</td>
+                <td>{{ question.image }}</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <h2>Answers</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Time</th>
+                <th>Votes</th>
+                <th>Message</th>
+                <th>Image</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for answer in question['answers'] %}
+                <tr>
+                    <td>{{ answer.id }}</td>
+                    <td>{{ answer.submisson_time }}</td>
+                    <td>{{ answer.vote_number }}</td>
+                    <td>{{ answer.message }}</td>
+                    <td>{{ answer.image }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
 
 </body>
 </html>

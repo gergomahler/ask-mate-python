@@ -7,9 +7,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def main_page():
-    title = data_manager.get_question_titles()
+    questions = data_manager.get_questions()
 
-    return render_template('list.html', title=title)
+    return render_template('list.html', questions=questions)
 
 
 @app.route('/ask-question', methods=['GET', 'POST'])

@@ -23,7 +23,7 @@ def add_question():
 
 @app.route('/question/<question_id>')
 def show_question_details(question_id):
-    question = data_manager.get_question_details()
+    question = data_manager.get_question_details(question_id)
 
     return render_template('question.html', question=question)
 

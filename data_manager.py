@@ -39,3 +39,23 @@ def add_new_question(request_form):
     connection.append_to_file(QUESTION_FILE, new_question)
 
     return new_question['id']
+
+
+def get_question_details(question_id):
+    questions = get_questions()
+    needed_question = None
+    for question in questions:
+        if question['id'] == question_id:
+            needed_question = question
+    needed_question['answers'] = get_answers_for_question(question_id)
+    return needed_question
+
+
+
+def get_answers_for_question(question_id):
+    answers = connection.read_from_file(ANSWER_FILE)
+    needed_answers = []
+    for answer in answers:
+        if answer['question_id'] == question_id:
+            needed_answers.append(answer)
+    return needed_answers

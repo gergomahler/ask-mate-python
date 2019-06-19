@@ -18,7 +18,7 @@ def add_question():
         return render_template('add-question.html')
     elif request.method == 'POST':
         question_id = data_manager.add_new_question(request.form)
-        return redirect('/question/{{ question_id }}')
+        return redirect(f'/question/{question_id}')
 
 
 @app.route('/question/<question_id>')

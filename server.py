@@ -17,10 +17,8 @@ def add_question():
     if request.method == 'GET':
         return render_template('add-question.html')
     else:
-        question = data_manager.vmi()
-        data_manager.vmi(question)
-
-        return redirect('/question/<question_id>')
+        question_id = data_manager.add_new_question(request.form)
+        return redirect('/question/{{ question_id }}')
 
 
 @app.route('/question/<question_id>')

@@ -26,7 +26,7 @@
         <tbody>
             <tr>
                 <td>{{ question.id }}</td>
-                <td>{{ question.submisson_time }}</td>
+                <td>{{ question.submission_time }}</td>
                 <td>{{ question.view_number }}</td>
                 <td>{{ question.vote_number }}</td>
                 <td>{{ question.message }}</td>
@@ -55,7 +55,7 @@
             {% for answer in question['answers'] %}
                 <tr>
                     <td>{{ answer.id }}</td>
-                    <td>{{ answer.submisson_time }}</td>
+                    <td>{{ answer.submission_time }}</td>
                     <td>{{ answer.vote_number }}</td>
                     <td>{{ answer.message }}</td>
                     <td>{{ answer.image }}</td>

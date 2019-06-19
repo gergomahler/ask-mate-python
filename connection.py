@@ -1,6 +1,9 @@
 import csv
 
 
+
+
+
 def read_from_file(filename):
     with open(filename, 'r', newline='') as csv_file:
         reader = csv.DictReader(csv_file)
@@ -11,15 +14,15 @@ def read_from_file(filename):
     return data
 
 
-def append_to_file(filename, dict_to_append):
+def append_to_file(filename, dict_to_append, filednames):
     with open(filename, 'a', newline='') as csv_file:
-        writer = csv.DictWriter(csv_file)
+        writer = csv.DictWriter(csv_file, filednames)
         writer.writerow(dict_to_append)
     csv_file.close()
 
-def write_to_file(filename, list_of_dicts_to_write):
+def write_to_file(filename, list_of_dicts_to_write, fieldnames):
     with open(filename, 'w', newline='') as csv_file:
-        writer = csv.DictWriter(csv_file)
+        writer = csv.DictWriter(csv_file, fieldnames)
 
         writer.writeheader()
         for row in list_of_dicts_to_write:

@@ -30,11 +30,19 @@ def get_questions():
     return sorted_questions
 
 
-def generate_id(for_which_file=0):
-    if for_which_file == 0:
-        return len(connection.read_from_file(QUESTION_FILE))
-    else:
-        return len(connection.read_from_file(ANSWER_FILE))
+def generate_question_id():
+
+    return len(connection.read_from_file(QUESTION_FILE))
+
+
+def generate_answer_id(question_id):
+    answers = connection.read_from_file(ANSWER_FILE)
+    needed_answers = []
+    for answer in answers:
+        if answer['question_id'] == question_id:
+            needed_answers.append(answer)
+
+    return len(needed_answers)
 
 
 def get_question_details(question_id):
@@ -69,7 +77,7 @@ def get_answers_for_question(question_id):
 
 
 def add_new_question(request_form):
-    new_question = {'id': generate_id(), 'submission_time': str(time.time()), 'view_number': 0,
+    new_question = {'id': generate_question_id(), 'submission_time': str(time.time()), 'view_number': 0,
                     'vote_number': 0, 'title': request_form['Title'], 'message': request_form['Message'], 'image': None}
 
     connection.append_to_file(QUESTION_FILE, new_question, QUESTION_KEYS)
@@ -77,8 +85,8 @@ def add_new_question(request_form):
     return new_question['id']
 
 
-def add_new_answer(request_form):
-    new_answer = {'id': generate_id(1), 'submission_time': str(time.time()),
+def add_new_answer(request_form, question_id):
+    new_answer = {'id': generate_answer_id(question_id), 'submission_time': str(time.time()),
                   'vote_number': 0,'question_id': request_form['question_id'],
                   'message': request_form['Message'], 'image': None}
 

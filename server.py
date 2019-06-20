@@ -34,7 +34,7 @@ def add_answer(question_id):
     if request.method == 'GET':
         return render_template('new-answer.html', question_id=question_id)
     else:
-        data_manager.add_new_answer(request.form)
+        data_manager.add_new_answer(request.form, question_id)
 
         return redirect(f'/question/{question_id}')
 

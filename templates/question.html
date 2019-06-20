@@ -12,7 +12,7 @@
     <br>
     <br>
 
-    <table cellpadding="8">
+    <table cellpadding="8" width="80%">
     <colgroup>
         <col style="background-color: orange" span="6">
     </colgroup>
@@ -22,7 +22,7 @@
                 <th>Time</th>
                 <th>Views</th>
                 <th>Votes</th>
-                <th>Message</th>
+                <th width="50%">Message</th>
                 <th>Image</th>
             </tr>
         </thead>
@@ -33,7 +33,7 @@
                 <td>{{ question.submission_time }}</td>
                 <td>{{ question.view_number }}</td>
                 <td>{{ question.vote_number }}</td>
-                <td>{{ question.message }}</td>
+                <td width="50%">{{ question.message }}</td>
                 <td>{{ question.image }}</td>
             </tr>
 
@@ -42,7 +42,7 @@
 
     <h2>Answers</h2>
 
-    <table cellpadding="8">
+    <table cellpadding="8" width="80%">
     <colgroup>
         <col style="background-color: lightgoldenrodyellow" span="5">
     </colgroup>
@@ -51,7 +51,7 @@
                 <th>Id</th>
                 <th>Time</th>
                 <th>Votes</th>
-                <th>Message</th>
+                <th width="50%">Message</th>
                 <th>Image</th>
             </tr>
         </thead>
@@ -62,7 +62,7 @@
                     <td>{{ answer.id }}</td>
                     <td>{{ answer.submission_time }}</td>
                     <td>{{ answer.vote_number }}</td>
-                    <td>{{ answer.message }}</td>
+                    <td width="50%">{{ answer.message }}</td>
                     <td>{{ answer.image }}</td>
                 </tr>
             {% endfor %}

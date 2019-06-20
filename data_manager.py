@@ -4,13 +4,14 @@ import connection
 
 
 QUESTION_KEYS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
+ANSWER_KEYS = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
 QUESTION_FILE = 'sample_data/question.csv'
 ANSWER_FILE = 'sample_data/answer.csv'
 
 
 def change_unix_to_utc(list_of_dicts):
     for question in list_of_dicts:
-        timestamp = float(question["submission_time"])
+        timestamp = float(question["submission_time"]) + 7200
         question["submission_time"] = \
             datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -33,15 +34,6 @@ def generate_id():
     return len(connection.read_from_file(QUESTION_FILE))
 
 
-def add_new_question(request_form):
-    new_question = {'id': generate_id(), 'submission_time': str(time.time()), 'view_number': 0,
-                    'vote_number': 0, 'title': request_form['Title'], 'message': request_form['Message'], 'image': None}
-
-    connection.append_to_file(QUESTION_FILE, new_question, QUESTION_KEYS)
-
-    return new_question['id']
-
-
 def get_question_details(question_id):
     questions = get_questions()
     needed_question = None
@@ -55,7 +47,6 @@ def get_question_details(question_id):
     return needed_question
 
 
-
 def get_answers_for_question(question_id):
     answers = connection.read_from_file(ANSWER_FILE)
     needed_answers = []
@@ -63,3 +54,19 @@ def get_answers_for_question(question_id):
         if answer['question_id'] == question_id:
             needed_answers.append(answer)
     return change_unix_to_utc(needed_answers)
+
+
+def add_new_question(request_form):
+    new_question = {'id': generate_id(), 'submission_time': str(time.time()), 'view_number': 0,
+                    'vote_number': 0, 'title': request_form['Title'], 'message': request_form['Message'], 'image': None}
+
+    connection.append_to_file(QUESTION_FILE, new_question, QUESTION_KEYS)
+
+    return new_question['id']
+
+
+def add_new_answer(request_form):
+    new_answer = {'id': generate_id(), 'submission_time': str(time.time()),
+                    'vote_number': 0,'question_id': request_form['question_id'], 'message': request_form['Message'], 'image': None}
+
+    connection.append_to_file(ANSWER_FILE, new_answer, ANSWER_KEYS)

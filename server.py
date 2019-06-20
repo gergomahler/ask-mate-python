@@ -6,6 +6,7 @@ app = Flask(__name__)
 
 
 @app.route('/')
+@app.route('/list')
 def main_page():
     questions = data_manager.get_questions()
 

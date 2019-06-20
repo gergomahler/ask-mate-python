@@ -67,6 +67,7 @@ def add_new_question(request_form):
 
 def add_new_answer(request_form):
     new_answer = {'id': generate_id(), 'submission_time': str(time.time()),
-                    'vote_number': 0,'question_id': request_form['question_id'], 'message': request_form['Message'], 'image': None}
+                  'vote_number': 0,'question_id': request_form['question_id'],
+                  'message': request_form['Message'], 'image': None}
 
     connection.append_to_file(ANSWER_FILE, new_answer, ANSWER_KEYS)

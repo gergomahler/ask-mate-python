@@ -45,7 +45,7 @@ def get_question_details(question_id):
     for question in questions_utc:
         if question['id'] == question_id:
             needed_question = question
-    if get_answers_for_question(question_id) != None:
+    if get_answers_for_question(question_id) is not None:
         needed_question['answers'] = get_answers_for_question(question_id)
     else:
         needed_question['answers'] = {}

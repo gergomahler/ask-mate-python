@@ -6,11 +6,17 @@
 </head>
 <body>
     <h1>Enter your answer!</h1>
+    <a style="text-decoration: none" href="/">Home page</a>
+    <br>
+    <br>
+
     <form action="/question/{{ question_id }}/new-answer" method="post">
         <label for="message input">Type your answer</label><br>
         <textarea id="message input" name="Message" rows="8" cols="80"></textarea><br>
         <input type="hidden" name="question_id" value="{{ question_id }}">
         <button type="submit">Submit answer</button>
     </form>
+    <br>
+    <a style="text-decoration: none" href="#" onclick="history.back();return false">Back</a>
 </body>
 </html>

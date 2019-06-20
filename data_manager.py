@@ -27,7 +27,7 @@ def get_questions():
     questions = connection.read_from_file(QUESTION_FILE)
     sorted_questions = sorting_by_submission_time(questions)
 
-    return change_unix_to_utc(sorted_questions)
+    return sorted_questions
 
 
 def generate_id(for_which_file=0):
@@ -39,8 +39,10 @@ def generate_id(for_which_file=0):
 
 def get_question_details(question_id):
     questions = get_questions()
+    increase_view_number(question_id, questions)
+    questions_utc = change_unix_to_utc(questions)
     needed_question = None
-    for question in questions:
+    for question in questions_utc:
         if question['id'] == question_id:
             needed_question = question
     if get_answers_for_question(question_id) != None:
@@ -48,6 +50,13 @@ def get_question_details(question_id):
     else:
         needed_question['answers'] = {}
     return needed_question
+
+
+def increase_view_number(question_id, questions):
+    for question in questions:
+        if question['id'] == question_id:
+            question['view_number'] = int(question['view_number']) + 1
+            connection.write_to_file(QUESTION_FILE, questions, QUESTION_KEYS)
 
 
 def get_answers_for_question(question_id):

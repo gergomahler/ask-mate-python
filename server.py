@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/list')
 def main_page():
-    questions = data_manager.get_questions()
+    questions = data_manager.change_unix_to_utc(data_manager.get_questions())
 
     return render_template('list.html', questions=questions)
 

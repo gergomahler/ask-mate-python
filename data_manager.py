@@ -47,6 +47,32 @@ def get_answers_for_question(cursor, question_id):
                     WHERE question_id = %(question_id)s
                     ORDER BY submission_time DESC;
                    """,
-                   {'question_id': question_id})
+                    {'question_id': question_id})
+
     answers = cursor.fetchall()
     return answers
+
+
+@connection.connection_handler
+def add_new_question(cursor, request_form):
+
+    cursor.execute("""
+                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+                    VALUES (0, 0, 0, %(title)s, %(message)s, NULL);
+                   """,
+                   {'title': request_form['Title'],
+                    'message': request_form['Message']})
+    id = cursor.lastrowid
+    return id
+
+
+@connection.connection_handler
+def add_new_answer(cursor, request_form, question_id):
+
+    cursor.execute("""
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+                    VALUES (0, 0, %(question_id)s, %(message)s, NULL)
+                   """,
+                   {'question_id': request_form['question_id'],
+                    'message': request_form['Message']})
+

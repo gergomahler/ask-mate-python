@@ -62,7 +62,7 @@ def add_new_question(cursor, request_form):
                    """,
                    {'title': request_form['Title'],
                     'message': request_form['Message']})
-    id = cursor.lastrowid
+    id = cursor.lastrowid()
     return id
 
 

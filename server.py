@@ -8,7 +8,7 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/list')
 def main_page():
-    questions = data_manager.change_unix_to_utc(data_manager.get_questions())
+    questions = data_manager.get_questions()
 
     return render_template('list.html', questions=questions)
 
@@ -25,8 +25,9 @@ def add_question():
 @app.route('/question/<question_id>')
 def show_question_details(question_id):
     question = data_manager.get_question_details(question_id)
+    answers = data_manager.get_answers_for_question(question_id)
 
-    return render_template('question.html', question=question)
+    return render_template('question.html', question=question, answers=answers)
 
 
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])

@@ -23,11 +23,14 @@ def sorting_by_submission_time(questions):
     return sorted(questions, key=lambda k: k['submission_time'], reverse=True)
 
 
-def get_questions():
-    questions = connection.read_from_file(QUESTION_FILE)
-    sorted_questions = sorting_by_submission_time(questions)
-
-    return sorted_questions
+@connection.connection_handler
+def get_questions(cursor):
+    cursor.execute("""
+                    SELECT submission_time, title FROM question
+                    ORDER BY submission_time DESC;
+                   """)
+    questions = cursor.fetchall()
+    return questions
 
 
 def generate_question_id():
@@ -67,13 +70,17 @@ def increase_view_number(question_id, questions):
             connection.write_to_file(QUESTION_FILE, questions, QUESTION_KEYS)
 
 
-def get_answers_for_question(question_id):
-    answers = connection.read_from_file(ANSWER_FILE)
-    needed_answers = []
-    for answer in answers:
-        if answer['question_id'] == question_id:
-            needed_answers.append(answer)
-    return change_unix_to_utc(needed_answers)
+@connection.connection_handler
+def get_answers_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT submission_time, message FROM answer
+                    LEFT JOIN question
+                    ON answer.question_id = question.id
+                    WHERE question_id = %(question_id)s
+                    ORDER BY submission_time DESC;
+                   """)
+    answers = cursor.fetchall()
+    return answers
 
 
 def add_new_question(request_form):

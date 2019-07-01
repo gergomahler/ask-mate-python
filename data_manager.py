@@ -27,9 +27,6 @@ def get_questions(cursor):
     return questions
 
 
-def generate_question_id():
-
-
 @connection.connection_handler
 def get_question_details(cursor, question_id):
    cursor.execute("""
@@ -41,11 +38,11 @@ def get_question_details(cursor, question_id):
    return question
 
 
-def increase_view_number(question_id, questions):
-    for question in questions:
-        if question['id'] == question_id:
-            question['view_number'] = int(question['view_number']) + 1
-            connection.write_to_file(QUESTION_FILE, questions, QUESTION_KEYS)
+# def increase_view_number(question_id, questions):
+#     for question in questions:
+#         if question['id'] == question_id:
+#             question['view_number'] = int(question['view_number']) + 1
+#             connection.write_to_file(QUESTION_FILE, questions, QUESTION_KEYS)
 
 
 @connection.connection_handler
@@ -61,25 +58,25 @@ def get_answers_for_question(cursor, question_id):
     return answers
 
 
-def add_new_question(request_form):
-
-    new_question = {'id': generate_question_id(),
-                    'submission_time': str(time.time()),
-                    'view_number': 0,
-                    'vote_number': 0,
-                    'title': request_form['Title'],
-                    'message': request_form['Message'],
-                    'image': None
-    }
-
-    connection.append_to_file(QUESTION_FILE, new_question, QUESTION_KEYS)
-
-    return new_question['id']
-
-
-def add_new_answer(request_form, question_id):
-    new_answer = {'id': generate_answer_id(question_id), 'submission_time': str(time.time()),
-                  'vote_number': 0,'question_id': request_form['question_id'],
-                  'message': request_form['Message'], 'image': None}
+# def add_new_question(request_form):
+#
+#     new_question = {'id': generate_question_id(),
+#                     'submission_time': str(time.time()),
+#                     'view_number': 0,
+#                     'vote_number': 0,
+#                     'title': request_form['Title'],
+#                     'message': request_form['Message'],
+#                     'image': None
+#     }
+#
+#     connection.append_to_file(QUESTION_FILE, new_question, QUESTION_KEYS)
+#
+#     return new_question['id']
+#
+#
+# def add_new_answer(request_form, question_id):
+#     new_answer = {'id': generate_answer_id(question_id), 'submission_time': str(time.time()),
+#                   'vote_number': 0,'question_id': request_form['question_id'],
+#                   'message': request_form['Message'], 'image': None}
 
 

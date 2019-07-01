@@ -6,7 +6,7 @@
 </head>
 <body>
 
-    <h1>{{ question.title }}</h1>
+    <h1>{{ question[0].title }}</h1>
 
     <a style="text-decoration: none" href="/">Home page</a>
     <br>
@@ -29,12 +29,12 @@
 
         <tbody>
             <tr>
-                <td>{{ question.id }}</td>
-                <td>{{ question.submission_time }}</td>
-                <td>{{ question.view_number }}</td>
-                <td>{{ question.vote_number }}</td>
-                <td width="50%">{{ question.message }}</td>
-                <td>{{ question.image }}</td>
+                <td>{{ question[0].id }}</td>
+                <td>{{ question[0].submission_time }}</td>
+                <td>{{ question[0].view_number }}</td>
+                <td>{{ question[0].vote_number }}</td>
+                <td width="50%">{{ question[0].message }}</td>
+                <td>{{ question[0].image }}</td>
             </tr>
 
         </tbody>

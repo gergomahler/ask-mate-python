@@ -41,7 +41,7 @@ def get_question_details(question_id):
     questions = get_questions()
     increase_view_number(question_id, questions)
     questions_utc = change_unix_to_utc(questions)
-    needed_question = None
+    needed_question = None # use filter here
     for question in questions_utc:
         if question['id'] == question_id:
             needed_question = question
@@ -69,8 +69,15 @@ def get_answers_for_question(question_id):
 
 
 def add_new_question(request_form):
-    new_question = {'id': generate_id(), 'submission_time': str(time.time()), 'view_number': 0,
-                    'vote_number': 0, 'title': request_form['Title'], 'message': request_form['Message'], 'image': None}
+    new_question = {
+        'id': generate_id(),
+        'submission_time': str(time.time()),
+        'view_number': 0,
+        'vote_number': 0,
+        'title': request_form['Title'],
+        'message': request_form['Message'],
+        'image': None
+    }
 
     connection.append_to_file(QUESTION_FILE, new_question, QUESTION_KEYS)
 

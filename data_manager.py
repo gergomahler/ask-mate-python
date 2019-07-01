@@ -12,11 +12,6 @@ def change_unix_to_utc(list_of_dicts):
     return list_of_dicts
 
 
-def sorting_by_submission_time(questions):
-
-    return sorted(questions, key=lambda k: k['submission_time'], reverse=True)
-
-
 @connection.connection_handler
 def get_questions(cursor):
     cursor.execute("""
@@ -49,34 +44,34 @@ def get_question_details(cursor, question_id):
 def get_answers_for_question(cursor, question_id):
     cursor.execute("""
                     SELECT submission_time, message FROM answer
-                    LEFT JOIN question
-                    ON answer.question_id = question.id
                     WHERE question_id = %(question_id)s
                     ORDER BY submission_time DESC;
-                   """)
+                   """,
+                  {'question_id': question_id})
     answers = cursor.fetchall()
     return answers
 
 
-# def add_new_question(request_form):
-#
-#     new_question = {'id': generate_question_id(),
-#                     'submission_time': str(time.time()),
-#                     'view_number': 0,
-#                     'vote_number': 0,
-#                     'title': request_form['Title'],
-#                     'message': request_form['Message'],
-#                     'image': None
-#     }
-#
-#     connection.append_to_file(QUESTION_FILE, new_question, QUESTION_KEYS)
-#
-#     return new_question['id']
-#
-#
-# def add_new_answer(request_form, question_id):
-#     new_answer = {'id': generate_answer_id(question_id), 'submission_time': str(time.time()),
-#                   'vote_number': 0,'question_id': request_form['question_id'],
-#                   'message': request_form['Message'], 'image': None}
+@connection.connection_handler
+def add_new_question(cursor, request_form):
 
+    cursor.execute("""
+                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
+                    VALUES (0, 0, 0, %(title)s, %(message)s, NULL);
+                   """,
+                   {'title': request_form['Title'],
+                    'message': request_form['Message']})
+    id = cursor.lastrowid
+    return id
+
+
+@connection.connection_handler
+def add_new_answer(cursor, request_form, question_id):
+
+    cursor.execute("""
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
+                    VALUES (0, 0, %(question_id)s, %(message)s, NULL)
+                   """,
+                   {'question_id': request_form['question_id'],
+                    'message': request_form['Message']})
 

@@ -3,12 +3,6 @@ import time
 import connection
 
 
-QUESTION_KEYS = ['id', 'submission_time', 'view_number', 'vote_number', 'title', 'message', 'image']
-ANSWER_KEYS = ['id', 'submission_time', 'vote_number', 'question_id', 'message', 'image']
-QUESTION_FILE = 'sample_data/question.csv'
-ANSWER_FILE = 'sample_data/answer.csv'
-
-
 def change_unix_to_utc(list_of_dicts):
     for question in list_of_dicts:
         timestamp = float(question["submission_time"]) + 7200
@@ -18,46 +12,19 @@ def change_unix_to_utc(list_of_dicts):
     return list_of_dicts
 
 
-def sorting_by_submission_time(questions):
-
-    return sorted(questions, key=lambda k: k['submission_time'], reverse=True)
-
-
 def get_questions():
-    questions = connection.read_from_file(QUESTION_FILE)
-    sorted_questions = sorting_by_submission_time(questions)
-
-    return sorted_questions
+    pass
 
 
-def generate_question_id():
-
-    return len(connection.read_from_file(QUESTION_FILE))
-
-
-def generate_answer_id(question_id):
-    answers = connection.read_from_file(ANSWER_FILE)
-    needed_answers = []
-    for answer in answers:
-        if answer['question_id'] == question_id:
-            needed_answers.append(answer)
-
-    return len(needed_answers)
-
-
-def get_question_details(question_id):
-    questions = get_questions()
-    increase_view_number(question_id, questions)
-    questions_utc = change_unix_to_utc(questions)
-    needed_question = None # use filter here
-    for question in questions_utc:
-        if question['id'] == question_id:
-            needed_question = question
-    if get_answers_for_question(question_id) is not None:
-        needed_question['answers'] = get_answers_for_question(question_id)
-    else:
-        needed_question['answers'] = {}
-    return needed_question
+@connection.connection_handler
+def get_question_details(cursor, question_id):
+   cursor.execute("""
+                    SELECT * FROM question
+                    WHERE id = %(question_id)s;
+                  """,
+                  {'question_id': question_id})
+   question = cursor.fetchall()
+   return question
 
 
 def increase_view_number(question_id, questions):
@@ -81,7 +48,7 @@ def add_new_question(request_form):
     new_question = {'id': generate_question_id(),
                     'submission_time': str(time.time()),
                     'view_number': 0,
-                    'vote_number': 0, 
+                    'vote_number': 0,
                     'title': request_form['Title'],
                     'message': request_form['Message'],
                     'image': None
@@ -97,4 +64,4 @@ def add_new_answer(request_form, question_id):
                   'vote_number': 0,'question_id': request_form['question_id'],
                   'message': request_form['Message'], 'image': None}
 
-    connection.append_to_file(ANSWER_FILE, new_answer, ANSWER_KEYS)
+

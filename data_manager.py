@@ -24,20 +24,19 @@ def get_questions(cursor):
 
 @connection.connection_handler
 def get_question_details(cursor, question_id):
-   cursor.execute("""
+    cursor.execute("""
+                    UPDATE question
+                    SET view_number = view_number + 1
+                    WHERE id = %(question_id)s;
+                   """,
+                   {'question_id': question_id})
+    cursor.execute("""
                     SELECT * FROM question
                     WHERE id = %(question_id)s;
-                  """,
-                  {'question_id': question_id})
-   question = cursor.fetchall()
-   return question
-
-
-# def increase_view_number(question_id, questions):
-#     for question in questions:
-#         if question['id'] == question_id:
-#             question['view_number'] = int(question['view_number']) + 1
-#             connection.write_to_file(QUESTION_FILE, questions, QUESTION_KEYS)
+                   """,
+                   {'question_id': question_id})
+    question = cursor.fetchall()
+    return question
 
 
 @connection.connection_handler

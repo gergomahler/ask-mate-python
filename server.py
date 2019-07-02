@@ -26,6 +26,7 @@ def add_question():
 def show_question_details(question_id):
     question = data_manager.get_question_details(question_id)
     answers = data_manager.get_answers_for_question(question_id)
+    data_manager.update_view_number(question_id)
 
     return render_template('question.html', question=question, answers=answers)
 
@@ -36,6 +37,17 @@ def add_answer(question_id):
         return render_template('new-answer.html', question_id=question_id)
 
     data_manager.add_new_answer(request.form, question_id)
+
+    return redirect(f'/question/{question_id}')
+
+
+@app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
+def edit_question(question_id):
+    question = data_manager.get_question_details(question_id)
+    if request.method == 'GET':
+        return render_template('edit-question.html', question_id=question_id, question=question)
+
+    data_manager.edit_question(request.form, question_id)
 
     return redirect(f'/question/{question_id}')
 

@@ -46,6 +46,12 @@
 
     <a style="text-decoration: none" href="/question/{{ question[0].id }}/delete">Delete question</a>
 
+    <a style="..." href="/question/{{ question[0].id }}/edit">Edit question</a>
+
+    <a style="..." href="/question/{{ question[0].id }}/vote-up">Vote Up</a>
+
+    <a style="..." href="/question/{{ question[0].id }}/vote-down">Vote Down</a>
+
     <h2>Answers</h2>
 
     <table cellpadding="8" width="80%">
@@ -72,6 +78,9 @@
                     <td>{{ answer.vote_number }}</td>
                     <td width="50%">{{ answer.message }}</td>
                     <td>{{ answer.image }}</td>
+                    <td><a style="..." href="/answer/{{ answer.id }}/edit">Edit</a></td>
+                    <td><a style="..." href="/answer/{{ answer.id }}/vote-up">Vote Up</a></td>
+                    <td><a style="..." href="/answer/{{ answer.id }}/vote-down">Vote Down</a></td>
                     <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/edit">Edit</a></td>
                     <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/delete">Delete</a></td>
                 </tr>

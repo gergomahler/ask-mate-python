@@ -70,8 +70,9 @@ def edit_answer(answer_id):
         return render_template('edit-answer.html', answer=answer)
 
     data_manager.edit_answer(request.form, answer_id)
+    question_id = data_manager.get_question_id_from_answer(answer_id)
 
-    return redirect('/')
+    return redirect(f'/question/{ question_id }')
 
 
 @app.route('/question/<question_id>/delete')
@@ -87,6 +88,36 @@ def delete_an_answer(answer_id):
     data_manager.delete_answer(answer_id)
 
     return redirect('/')
+
+
+@app.route('/question/<question_id>/vote-up')
+def vote_up_question(question_id):
+    data_manager.vote_up_question(question_id)
+
+    return redirect(f'/question/{question_id}')
+
+
+@app.route('/question/<question_id>/vote-down')
+def vote_down_question(question_id):
+    data_manager.vote_down_question(question_id)
+
+    return redirect(f'/question/{question_id}')
+
+
+@app.route('/answer/<answer_id>/vote-up')
+def vote_up_answer(answer_id):
+    data_manager.vote_up_answer(answer_id)
+    question_id = data_manager.get_question_id_from_answer(answer_id)
+
+    return redirect(f'/question/{question_id}')
+
+
+@app.route('/answer/<answer_id>/vote-down')
+def vote_down_answer(answer_id):
+    data_manager.vote_down_answer(answer_id)
+    question_id = data_manager.get_question_id_from_answer(answer_id)
+
+    return redirect(f'/question/{question_id}')
 
 
 if __name__ == '__main__':

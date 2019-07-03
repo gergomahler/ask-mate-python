@@ -17,6 +17,17 @@ def get_questions(cursor):
 
 
 @connection.connection_handler
+def get_question_id_from_answer(cursor, answer_id):
+    cursor.execute("""
+                    SELECT question_id FROM answer
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
+    question_id = cursor.fetchall()[0]['question_id']
+    return question_id
+
+
+@connection.connection_handler
 def get_answer(cursor, answer_id):
     cursor.execute("""
                     SELECT * FROM answer
@@ -98,8 +109,6 @@ def edit_question(cursor, request_form, question_id):
     cursor.execute("""
                     UPDATE question
                     SET submission_time = %(submission_time)s,
-                        view_number = 0,
-                        vote_number = 0,
                         title = %(title)s,
                         message = %(message)s
                     WHERE id = %(question_id)s;
@@ -115,7 +124,6 @@ def edit_answer(cursor, request_form, answer_id):
     cursor.execute("""
                     UPDATE answer
                     SET submission_time = %(submission_time)s,
-                        vote_number = 0,
                         message = %(message)s
                     WHERE id = %(answer_id)s;
                     """,
@@ -185,3 +193,43 @@ def get_latest_questions(cursor):
                    """)
     questions = cursor.fetchall()
     return questions
+
+
+@connection.connection_handler
+def vote_up_question(cursor, question_id):
+    cursor.execute("""
+                    UPDATE question
+                    SET vote_number = vote_number + 1
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+
+
+@connection.connection_handler
+def vote_up_answer(cursor, answer_id):
+    cursor.execute("""
+                    UPDATE answer
+                    SET vote_number = vote_number + 1
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})
+
+
+@connection.connection_handler
+def vote_down_question(cursor, question_id):
+    cursor.execute("""
+                    UPDATE question
+                    SET vote_number = vote_number - 1
+                    WHERE id = %(question_id)s;
+                    """,
+                   {'question_id': question_id})
+
+
+@connection.connection_handler
+def vote_down_answer(cursor, answer_id):
+    cursor.execute("""
+                    UPDATE answer
+                    SET vote_number = vote_number - 1
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id})

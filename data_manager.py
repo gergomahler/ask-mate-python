@@ -2,6 +2,10 @@ from datetime import datetime
 import connection
 
 
+def get_current_time():
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
 @connection.connection_handler
 def get_questions(cursor):
     cursor.execute("""
@@ -10,6 +14,17 @@ def get_questions(cursor):
                    """)
     questions = cursor.fetchall()
     return questions
+
+
+@connection.connection_handler
+def get_answer(cursor, answer_id):
+    cursor.execute("""
+                    SELECT * FROM answer
+                    WHERE id = %(answer_id)s;
+                   """,
+                   {'answer_id': answer_id})
+    answer = cursor.fetchall()
+    return answer
 
 
 @connection.connection_handler
@@ -54,7 +69,7 @@ def add_new_question(cursor, request_form):
                    """,
                    {'title': request_form['Title'],
                     'message': request_form['Message'],
-                    'submission_time': datetime.now()})
+                    'submission_time': get_current_time()})
     last_id = cursor.lastrowid
     return last_id
 
@@ -65,9 +80,9 @@ def add_new_answer(cursor, request_form, question_id):
                     INSERT INTO answer (submission_time, vote_number, question_id, message, image)
                     VALUES (%(submission_time)s, 0, %(question_id)s, %(message)s, NULL)
                    """,
-                   {'question_id': request_form['question_id'],
+                   {'question_id': question_id,
                     'message': request_form['Message'],
-                    'submission_time': datetime.now()})
+                    'submission_time': get_current_time()})
 
 
 @connection.connection_handler
@@ -84,7 +99,21 @@ def edit_question(cursor, request_form, question_id):
                    {'question_id': int(question_id),
                     'title': request_form['Title'],
                     'message': request_form['Message'],
-                    'submission_time': str(datetime.now())})
+                    'submission_time': get_current_time()})
+
+
+@connection.connection_handler
+def edit_answer(cursor, request_form, answer_id):
+    cursor.execute("""
+                    UPDATE answer
+                    SET submission_time = %(submission_time)s,
+                        vote_number = 0,
+                        message = %(message)s
+                    WHERE id = %(answer_id)s;
+                    """,
+                   {'answer_id': answer_id,
+                    'message': request_form['message'],
+                    'submission_time': get_current_time()})
 
 
 @connection.connection_handler
@@ -137,6 +166,7 @@ def find_questions_and_answers(cursor, search_phrase):
                    {'search_phrase': '%' + search_phrase + '%'})
     questions = cursor.fetchall()
     return questions
+
 
 @connection.connection_handler
 def get_latest_questions(cursor):

@@ -116,3 +116,13 @@ def find_questions_and_answers(cursor, search_phrase):
                    {'search_phrase': '%' + search_phrase + '%'})
     questions = cursor.fetchall()
     return questions
+
+@connection.connection_handler
+def get_latest_questions(cursor):
+    cursor.execute("""
+                    SELECT id, submission_time, title FROM question
+                    ORDER BY submission_time DESC
+                    LIMIT 5;
+                   """)
+    questions = cursor.fetchall()
+    return questions

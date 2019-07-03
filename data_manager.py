@@ -117,21 +117,42 @@ def edit_answer(cursor, request_form, answer_id):
 
 
 @connection.connection_handler
-def delete_question(cursor, question_id):
+def delete_answer(cursor, answer_id):
+    cursor.execute("""
+                    DELETE FROM comment
+                    WHERE answer_id = %(answer_id)s
+                   """,
+                   {'answer_id': answer_id})
+    cursor.execute("""
+                    DELETE FROM answer
+                    WHERE id = %(answer_id)s
+                   """,
+                   {'answer_id': answer_id})
+
+
+@connection.connection_handler
+def delete_question(cursor, question_id, answer_id):
+    cursor.execute("""
+                    DELETE FROM comment
+                    WHERE answer_id IN (SELECT answer_id FROM answer WHERE answer.question_id = %(question_id)s) OR question_id = %(question_id)s
+                   """,
+                   {'question_id': question_id})
+    cursor.execute("""
+                    DELETE FROM question_tag
+                    WHERE question_id = %(question_id)s
+                   """,
+                   {'question_id': question_id})
+    cursor.execute("""
+                    DELETE FROM answer
+                    WHERE question_id = %(question_id)s
+                   """,
+                   {'question_id': question_id})
     cursor.execute("""
                     DELETE FROM question
                     WHERE id = %(question_id)s
                    """,
                    {'question_id': question_id})
 
-
-# @connection.connection_handler
-# def delete_answer(cursor, answer_id):
-#     cursor.execute("""
-#                     DELETE FROM answer
-#                     WHERE id = %(answer_id)s
-#                    """,
-#                    {'answer_id': answer_id})
 
 @connection.connection_handler
 def find_questions_and_answers(cursor, search_phrase):

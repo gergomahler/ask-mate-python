@@ -7,37 +7,38 @@
 <body>
 
     <a style="text-decoration: none" href="/"><h1>Askmate</h1></a>
-
-    <a style="text-decoration: none" href="/ask-question">Ask question</a>
-    <br>
+    
     <form action="/search" method="get">
         <input type="text" name="q">
         <button type="submit">Search</button>
     </form>
     <br>
+    <a style="text-decoration: none" href="/ask-question">Ask question</a>
     <br>
-    {% if link == True %}
-    <a style="text-decoration: none" href="/list">All Questions</a>
-    {% endif %}
+    <br>
     <table>
 
         <thead>
-            <tr>
-                <th>Time</th>
-                <th>Question</th>
-            </tr>
+        <tr>
+            <th>Time</th>
+            <th>Question</th>
+        </tr>
         </thead>
 
         <tbody>
-            {% for question in questions %}
+        {% for question in questions %}
             <tr>
                 <td>{{ question.submission_time }}</td>
                 <td><a style="text-decoration: none" href="/question/{{ question.id }}">{{ question.title }}</a></td>
             </tr>
-            {% endfor %}
+        {% endfor %}
         </tbody>
 
     </table>
+    <br>
+    {% if link == True %}
+        <a style="text-decoration: none" href="/list">All questions</a>
+    {% endif %}
 
 </body>
 </html>

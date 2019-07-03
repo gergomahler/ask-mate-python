@@ -40,6 +40,13 @@ def add_answer(question_id):
     return redirect(f'/question/{question_id}')
 
 
+@app.route('/search')
+def search():
+    search_phrase = request.args.get('q')
+    search_results = data_manager.find_questions_and_answers(search_phrase)
+    return render_template('list.html', questions= search_results)
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',

@@ -1,15 +1,5 @@
 from datetime import datetime
-import pytz
 import connection
-
-
-def change_unix_to_utc(list_of_dicts):
-    for question in list_of_dicts:
-        timestamp = float(question["submission_time"]) + 7200
-        question["submission_time"] = \
-            datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-
-    return list_of_dicts
 
 
 @connection.connection_handler
@@ -116,9 +106,6 @@ def delete_question(cursor, question_id):
 
 @connection.connection_handler
 def find_questions_and_answers(cursor, search_phrase):
-    # question_ids_from_answer_search = find_question_ids(search_phrase)
-
-
     cursor.execute("""
                     SELECT  DISTINCT id, submission_time, title FROM question
                     

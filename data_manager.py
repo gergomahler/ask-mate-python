@@ -1,4 +1,5 @@
 from datetime import datetime
+import pytz
 import connection
 
 
@@ -112,3 +113,19 @@ def delete_question(cursor, question_id):
 #                     WHERE id = %(answer_id)s
 #                    """,
 #                    {'answer_id': answer_id})
+
+@connection.connection_handler
+def find_questions_and_answers(cursor, search_phrase):
+    # question_ids_from_answer_search = find_question_ids(search_phrase)
+
+
+    cursor.execute("""
+                    SELECT  DISTINCT id, submission_time, title FROM question
+                    
+                    WHERE message LIKE  %(search_phrase)s OR title LIKE %(search_phrase)s
+                    OR id IN (SELECT question_id FROM answer WHERE message LIKE %(search_phrase)s)
+                    ORDER BY submission_time DESC;
+                   """,
+                   {'search_phrase': '%' + search_phrase + '%'})
+    questions = cursor.fetchall()
+    return questions

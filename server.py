@@ -26,6 +26,7 @@ def add_question():
 def show_question_details(question_id):
     question = data_manager.get_question_details(question_id)
     answers = data_manager.get_answers_for_question(question_id)
+    data_manager.update_view_number(question_id)
 
     return render_template('question.html', question=question, answers=answers)
 
@@ -45,6 +46,24 @@ def search():
     search_phrase = request.args.get('q')
     search_results = data_manager.find_questions_and_answers(search_phrase)
     return render_template('list.html', questions= search_results)
+
+
+@app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
+def edit_question(question_id):
+    question = data_manager.get_question_details(question_id)
+    if request.method == 'GET':
+        return render_template('edit-question.html', question_id=question_id, question=question)
+
+    data_manager.edit_question(request.form, question_id)
+
+    return redirect(f'/question/{question_id}')
+
+
+@app.route('/question/<question_id>/delete')
+def delete_a_question(question_id):
+    data_manager.delete_question(question_id)
+
+    return redirect('/')
 
 
 if __name__ == '__main__':

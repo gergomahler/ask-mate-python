@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask Mate | Edit Question</title>
+</head>
+<body>
+    <h1>Edit question</h1>
+    <br>
+    <a style="text-decoration: none" href="/">Home page</a>
+    <br>
+    <form action="/question/{{ question_id }}/edit" method="post">
+        <label for="title edit">Edit your question here</label><br>
+        <textarea id="title edit" name="Title" rows="2" cols="50"  required>{{ question[0].title }}</textarea><br><br>
+        <label for="message edit">Edit the additional information here</label><br>
+        <textarea id="message edit" name="Message" rows="8" cols="80" required>{{ question[0].message }}</textarea><br>
+        <button type="submit">Edit question</button>
+    </form>
+</body>
+</html>

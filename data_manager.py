@@ -63,7 +63,7 @@ def add_new_question(cursor, request_form):
 def add_new_answer(cursor, request_form, question_id):
     cursor.execute("""
                     INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                    VALUES (submission_time, 0, %(question_id)s, %(message)s, NULL)
+                    VALUES (%(submission_time)s, 0, %(question_id)s, %(message)s, NULL)
                    """,
                    {'question_id': request_form['question_id'],
                     'message': request_form['Message'],

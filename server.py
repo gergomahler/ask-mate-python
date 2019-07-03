@@ -63,6 +63,17 @@ def edit_question(question_id):
     return redirect(f'/question/{question_id}')
 
 
+@app.route('/answer/<answer_id>/edit', methods=['GET', 'POST'])
+def edit_answer(answer_id):
+    if request.method == 'GET':
+        answer = data_manager.get_answer(answer_id)
+        return render_template('edit-answer.html', answer=answer)
+
+    data_manager.edit_answer(request.form, answer_id)
+
+    return redirect('/')
+
+
 @app.route('/question/<question_id>/delete')
 def delete_a_question(question_id):
     data_manager.delete_question(question_id)

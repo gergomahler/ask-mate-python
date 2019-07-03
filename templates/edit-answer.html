@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask Mate | Edit Answer</title>
+</head>
+<body>
+    <h1>Edit answer</h1>
+    <a style="text-decoration: none" href="/">Home page</a>
+    <br>
+    <br>
+
+    <form action="/answer/{{ answer[0].id }}/edit" method="post">
+        <label for="message edit">Edit answer</label><br>
+        <textarea id="message edit" name="message" rows="8" cols="80" minlength="10" required>{{ answer[0].message }}</textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+    <a style="text-decoration: none" href="#" onclick="history.back();return false">Back</a>
+</body>
+</html>

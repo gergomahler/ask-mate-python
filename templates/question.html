@@ -57,6 +57,7 @@
                 <th>Votes</th>
                 <th width="50%">Message</th>
                 <th>Image</th>
+                <th>Delete</th>
             </tr>
         </thead>
 
@@ -68,6 +69,7 @@
                     <td>{{ answer.vote_number }}</td>
                     <td width="50%">{{ answer.message }}</td>
                     <td>{{ answer.image }}</td>
+                    <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/delete">Delete</a></td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -6,11 +6,15 @@ app = Flask(__name__)
 
 
 @app.route('/')
-@app.route('/list')
 def main_page():
-    questions = data_manager.get_questions()
+    questions = data_manager.get_latest_questions()
+    return render_template('list.html', questions=questions, link=True)
 
-    return render_template('list.html', questions=questions)
+
+@app.route('/list')
+def list_all_questions():
+    questions = data_manager.get_questions()
+    return render_template('list.html', questions=questions, link=False)
 
 
 @app.route('/ask-question', methods=['GET', 'POST'])

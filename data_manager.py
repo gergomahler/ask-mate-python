@@ -2,15 +2,6 @@ from datetime import datetime
 import connection
 
 
-def change_unix_to_utc(list_of_dicts):
-    for question in list_of_dicts:
-        timestamp = float(question["submission_time"]) + 7200
-        question["submission_time"] = \
-            datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
-
-    return list_of_dicts
-
-
 @connection.connection_handler
 def get_questions(cursor):
     cursor.execute("""
@@ -72,7 +63,7 @@ def add_new_question(cursor, request_form):
 def add_new_answer(cursor, request_form, question_id):
     cursor.execute("""
                     INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                    VALUES (submission_time, 0, %(question_id)s, %(message)s, NULL)
+                    VALUES (%(submission_time)s, 0, %(question_id)s, %(message)s, NULL)
                    """,
                    {'question_id': request_form['question_id'],
                     'message': request_form['Message'],
@@ -117,8 +108,6 @@ def delete_question(cursor, question_id, answer_id):
                     WHERE answer_id IN (SELECT answer_id FROM answer WHERE answer.question_id = %(question_id)s) OR question_id = %(question_id)s
                    """,
                    {'question_id': question_id})
-    # need to delete the comments at first, but the answer ids are in a dictionary
-
     cursor.execute("""
                     DELETE FROM question_tag
                     WHERE question_id = %(question_id)s
@@ -138,9 +127,6 @@ def delete_question(cursor, question_id, answer_id):
 
 @connection.connection_handler
 def find_questions_and_answers(cursor, search_phrase):
-    # question_ids_from_answer_search = find_question_ids(search_phrase)
-
-
     cursor.execute("""
                     SELECT  DISTINCT id, submission_time, title FROM question
                     
@@ -149,5 +135,15 @@ def find_questions_and_answers(cursor, search_phrase):
                     ORDER BY submission_time DESC;
                    """,
                    {'search_phrase': '%' + search_phrase + '%'})
+    questions = cursor.fetchall()
+    return questions
+
+@connection.connection_handler
+def get_latest_questions(cursor):
+    cursor.execute("""
+                    SELECT id, submission_time, title FROM question
+                    ORDER BY submission_time DESC
+                    LIMIT 5;
+                   """)
     questions = cursor.fetchall()
     return questions

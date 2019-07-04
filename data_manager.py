@@ -257,3 +257,24 @@ def add_comment_to_question(cursor, request_form, question_id):
                    {'question_id': question_id,
                     'message': request_form['message'],
                     'submission_time': get_current_time()})
+
+
+@connection.connection_handler
+def add_image_to_question(cursor, request_form, question_id):
+    cursor.execute("""
+                    UPDATE question
+                    SET image = %(image)s
+                    WHERE id = %(question_id)s
+                    """,
+                   {'question_id': question_id,
+                    'image': request_form['image']})
+
+
+@connection.connection_handler
+def add_image_to_answer(cursor, request_form, answer_id):
+    cursor.execute("""
+                    INSERT INTO question (image)
+                    VALUES (%(image)s)
+                    """,
+                   {'answer_id': answer_id,
+                    'image': request_form['image']})

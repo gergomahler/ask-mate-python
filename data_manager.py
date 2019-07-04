@@ -81,8 +81,16 @@ def add_new_question(cursor, request_form):
                    {'title': request_form['Title'],
                     'message': request_form['Message'],
                     'submission_time': get_current_time()})
-    last_id = cursor.lastrowid
-    return last_id
+    cursor.execute("""
+                   SELECT id FROM question
+                   WHERE message = %(message)s AND title = %(title)s;
+                   """,
+                   {'message': request_form['Message'],
+                    'title': request_form['Title']})
+    question_id = cursor.fetchall()
+    question_id = question_id[0]
+    question_id = question_id['id']
+    return question_id
 
 
 @connection.connection_handler

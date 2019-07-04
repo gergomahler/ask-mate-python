@@ -9,7 +9,7 @@ def get_current_time():
 @connection.connection_handler
 def get_questions(cursor):
     cursor.execute("""
-                    SELECT id, submission_time, title FROM question
+                    SELECT id, submission_time, title, vote_number, view_number FROM question
                     ORDER BY submission_time DESC;
                    """)
     questions = cursor.fetchall()
@@ -257,3 +257,9 @@ def add_comment_to_question(cursor, request_form, question_id):
                    {'question_id': question_id,
                     'message': request_form['message'],
                     'submission_time': get_current_time()})
+
+
+def sort_questions(sort_by, order, questions):
+    order_by = order == 'Desc'
+    questions = sorted(questions, key=lambda x: x[sort_by], reverse=order_by)
+    return questions

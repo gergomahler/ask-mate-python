@@ -23,7 +23,7 @@ def get_question_id_from_answer(cursor, answer_id):
                     WHERE id = %(answer_id)s;
                     """,
                    {'answer_id': answer_id})
-    question_id = cursor.fetchall()[0]['question_id']
+    question_id = cursor.fetchone()['question_id']
     return question_id
 
 
@@ -62,7 +62,7 @@ def update_view_number(cursor, question_id):
 @connection.connection_handler
 def get_answers_for_question(cursor, question_id):
     cursor.execute("""
-                    SELECT id, submission_time, message FROM answer
+                    SELECT id, submission_time, vote_number, message FROM answer
                     WHERE question_id = %(question_id)s
                     ORDER BY submission_time DESC;
                    """,
@@ -225,3 +225,27 @@ def vote_down_answer(cursor, answer_id):
                     WHERE id = %(answer_id)s;
                     """,
                    {'answer_id': answer_id})
+
+
+@connection.connection_handler
+def get_comments_for_question(cursor, question_id):
+    cursor.execute("""
+                    SELECT submission_time, message FROM comment
+                    WHERE question_id = %(question_id)s
+                    ORDER BY submission_time DESC;
+                    """,
+                   {'question_id': question_id})
+
+    question_comments = cursor.fetchall()
+    return question_comments
+
+
+@connection.connection_handler
+def add_comment_to_question(cursor, request_form, question_id):
+    cursor.execute("""
+                    INSERT INTO comment (question_id, message, submission_time, edited_count)
+                    VALUES (%(question_id)s, %(message)s, %(submission_time)s, NULL)
+                    """,
+                   {'question_id': question_id,
+                    'message': request_form['message'],
+                    'submission_time': get_current_time()})

@@ -46,11 +46,31 @@
 
     <a style="text-decoration: none" href="/question/{{ question[0].id }}/delete">Delete question</a>
 
-    <a style="..." href="/question/{{ question[0].id }}/edit">Edit question</a>
-
     <a style="..." href="/question/{{ question[0].id }}/vote-up">Vote Up</a>
 
     <a style="..." href="/question/{{ question[0].id }}/vote-down">Vote Down</a>
+
+    <a style="..." href="/question/{{ question[0].id }}/new-comment">Add comment</a>
+
+    <br>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for comment in question_comments %}
+                <tr>
+                    <td>{{ comment.submission_time }}</td>
+                    <td>{{ comment.message }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
     <h2>Answers</h2>
 
@@ -65,8 +85,6 @@
                 <th>Votes</th>
                 <th width="50%">Message</th>
                 <th>Image</th>
-                <th>Edit</th>
-                <th>Delete</th>
             </tr>
         </thead>
 
@@ -79,10 +97,9 @@
                     <td width="50%">{{ answer.message }}</td>
                     <td>{{ answer.image }}</td>
                     <td><a style="..." href="/answer/{{ answer.id }}/edit">Edit</a></td>
+                    <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/delete">Delete</a></td>
                     <td><a style="..." href="/answer/{{ answer.id }}/vote-up">Vote Up</a></td>
                     <td><a style="..." href="/answer/{{ answer.id }}/vote-down">Vote Down</a></td>
-                    <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/edit">Edit</a></td>
-                    <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/delete">Delete</a></td>
                 </tr>
             {% endfor %}
         </tbody>

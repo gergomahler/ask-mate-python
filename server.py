@@ -53,7 +53,7 @@ def add_answer(question_id):
 def search():
     search_phrase = request.args.get('q')
     search_results = data_manager.find_questions_and_answers(search_phrase)
-    return render_template('list.html', questions= search_results)
+    return render_template('list.html', questions=search_results)
 
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])

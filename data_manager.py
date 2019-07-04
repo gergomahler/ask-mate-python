@@ -145,7 +145,7 @@ def delete_answer(cursor, answer_id):
 
 
 @connection.connection_handler
-def delete_question(cursor, question_id, answer_id):
+def delete_question(cursor, question_id):
     cursor.execute("""
                     DELETE FROM comment
                     WHERE answer_id IN (SELECT answer_id FROM answer WHERE answer.question_id = %(question_id)s) 

@@ -85,9 +85,10 @@ def delete_a_question(question_id):
 
 @app.route('/answer/<answer_id>/delete')
 def delete_an_answer(answer_id):
+    question_id = data_manager.get_question_id_from_answer(answer_id)
     data_manager.delete_answer(answer_id)
 
-    return redirect('/')
+    return redirect(f'/question/{question_id}')
 
 
 @app.route('/question/<question_id>/vote-up')

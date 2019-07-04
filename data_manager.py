@@ -287,6 +287,7 @@ def add_image_to_answer(cursor, request_form, answer_id):
                    {'answer_id': answer_id,
                     'image': request_form['image']})
 
+
 def sort_questions(sort_by, order, questions):
     order_by = order == 'Desc'
     questions = sorted(questions, key=lambda x: x[sort_by], reverse=order_by)

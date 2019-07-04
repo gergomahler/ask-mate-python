@@ -148,7 +148,8 @@ def delete_answer(cursor, answer_id):
 def delete_question(cursor, question_id, answer_id):
     cursor.execute("""
                     DELETE FROM comment
-                    WHERE answer_id IN (SELECT answer_id FROM answer WHERE answer.question_id = %(question_id)s) OR question_id = %(question_id)s
+                    WHERE answer_id IN (SELECT answer_id FROM answer WHERE answer.question_id = %(question_id)s) 
+                    OR question_id = %(question_id)s
                    """,
                    {'question_id': question_id})
     cursor.execute("""
@@ -276,6 +277,7 @@ def add_image_to_answer(cursor, request_form, answer_id):
                     """,
                    {'answer_id': answer_id,
                     'image': request_form['image']})
+
 
 def sort_questions(sort_by, order, questions):
     order_by = order == 'Desc'

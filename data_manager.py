@@ -9,7 +9,7 @@ def get_current_time():
 @connection.connection_handler
 def get_questions(cursor):
     cursor.execute("""
-                    SELECT id, submission_time, title FROM question
+                    SELECT id, submission_time, title, vote_number, view_number FROM question
                     ORDER BY submission_time DESC;
                    """)
     questions = cursor.fetchall()
@@ -278,3 +278,8 @@ def add_image_to_answer(cursor, request_form, answer_id):
                     """,
                    {'answer_id': answer_id,
                     'image': request_form['image']})
+
+def sort_questions(sort_by, order, questions):
+    order_by = order == 'Desc'
+    questions = sorted(questions, key=lambda x: x[sort_by], reverse=order_by)
+    return questions

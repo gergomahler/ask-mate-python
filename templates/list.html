@@ -17,15 +17,15 @@
     <form action="/list" method="get">
         <label for="sort">Sort_by</label>
         <select id="sort" name="sort">
-            <option name="sort" value="date" selected>Date</option>
-            <option name="sort" value="votes">Votes</option>
-            <option name="sort" value="views">Asc</option>
+            <option name="sort" value="submission_time" selected>Date</option>
+            <option name="sort" value="vote_number">Votes</option>
+            <option name="sort" value="view_number">Views</option>
         </select>
         <br>
-        <label for="order">Votes</label>
+        <label for="order">Order</label>
         <select id="order" name="order">
-            <option name="order" value="desc">Desc</option>
-            <option name="order" value="asc">Asc</option>
+            <option name="order">Desc</option>
+            <option name="order">Asc</option>
         </select>
         <br>
         <button type="submit">Sort</button>

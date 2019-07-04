@@ -14,6 +14,9 @@ def main_page():
 @app.route('/list')
 def list_all_questions():
     questions = data_manager.get_questions()
+    if request.args.get('order') is not None:
+        questions = data_manager.sort_questions(request.args.get('sort'), request.args.get('order'), questions)
+
     return render_template('list.html', questions=questions, link=False)
 
 

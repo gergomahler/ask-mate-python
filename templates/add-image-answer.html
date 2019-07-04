@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add image</title>
+</head>
+<body>
+    <h1>Add an image</h1>
+    <a style="text-decoration: none" href="/">Home page</a>
+    <br>
+    <form action="/answer/{{ answer_id }}/new-image" method="post">
+        <label for="image_input">Enter the image address</label>
+        <textarea id="image_input" name="image" rows="5" cols="50" required></textarea><br>
+        <input type="hidden" name="answer_id" value="{{ answer_id }}">
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+    <a style="text-decoration: none" href="#" onclick="history.back();return false">Back</a>
+</body>
+</html>

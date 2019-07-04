@@ -62,7 +62,7 @@ def update_view_number(cursor, question_id):
 @connection.connection_handler
 def get_answers_for_question(cursor, question_id):
     cursor.execute("""
-                    SELECT id, submission_time, vote_number, message FROM answer
+                    SELECT id, submission_time, vote_number, message, image FROM answer
                     WHERE question_id = %(question_id)s
                     ORDER BY submission_time DESC;
                    """,
@@ -282,8 +282,9 @@ def add_image_to_question(cursor, request_form, question_id):
 @connection.connection_handler
 def add_image_to_answer(cursor, request_form, answer_id):
     cursor.execute("""
-                    INSERT INTO question (image)
-                    VALUES (%(image)s)
+                    UPDATE answer
+                    SET image = %(image)s
+                    WHERE id = %(answer_id)s
                     """,
                    {'answer_id': answer_id,
                     'image': request_form['image']})

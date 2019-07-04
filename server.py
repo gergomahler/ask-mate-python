@@ -155,6 +155,18 @@ def add_image_to_question(question_id):
     return redirect(f'/question/{question_id}')
 
 
+@app.route('/answer/<answer_id>/new-image', methods=['GET', 'POST'])
+def add_image_to_answer(answer_id):
+    if request.method == 'GET':
+        return render_template('add-image-answer.html', answer_id=answer_id)
+
+    data_manager.add_image_to_answer(request.form, answer_id)
+
+    question_id = data_manager.get_question_id_from_answer(answer_id)
+
+    return redirect(f'/question/{question_id}')
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',

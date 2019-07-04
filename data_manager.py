@@ -87,9 +87,7 @@ def add_new_question(cursor, request_form):
                    """,
                    {'message': request_form['Message'],
                     'title': request_form['Title']})
-    question_id = cursor.fetchall()
-    question_id = question_id[0]
-    question_id = question_id['id']
+    question_id = cursor.fetchone()['id']
     return question_id
 
 

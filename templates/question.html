@@ -18,7 +18,6 @@
     </colgroup>
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Time</th>
                 <th>Views</th>
                 <th>Votes</th>
@@ -29,7 +28,6 @@
 
         <tbody>
             <tr>
-                <td>{{ question[0].id }}</td>
                 <td>{{ question[0].submission_time }}</td>
                 <td>{{ question[0].view_number }}</td>
                 <td>{{ question[0].vote_number }}</td>
@@ -64,11 +62,13 @@
         </thead>
 
         <tbody>
-            {% for comment in question_comments %}
-                <tr>
-                    <td>{{ comment.submission_time }}</td>
-                    <td>{{ comment.message }}</td>
-                </tr>
+            {% for comment in comments %}
+                {% if comment.question_id == question[0].id %}
+                    <tr>
+                        <td>{{ comment.submission_time }}</td>
+                        <td>{{ comment.message }}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
         </tbody>
     </table>
@@ -81,7 +81,6 @@
     </colgroup>
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Time</th>
                 <th>Votes</th>
                 <th width="50%">Message</th>
@@ -92,7 +91,6 @@
         <tbody>
             {% for answer in answers %}
                 <tr>
-                    <td>{{ answer.id }}</td>
                     <td>{{ answer.submission_time }}</td>
                     <td>{{ answer.vote_number }}</td>
                     <td width="50%">{{ answer.message }}</td>
@@ -102,6 +100,30 @@
                     <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/delete">Delete</a></td>
                     <td><a style="..." href="/answer/{{ answer.id }}/vote-up">Vote Up</a></td>
                     <td><a style="..." href="/answer/{{ answer.id }}/vote-down">Vote Down</a></td>
+                    <td><a style="..." href="/answer/{{ answer.id }}/new-comment">Add Comment</a></td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Comment</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for comment in comments %}
+                                    {% if comment.answer_id == answer.id %}
+                                        <tr>
+                                            <td>{{ comment.submission_time }}</td>
+                                            <td>{{ comment.message }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

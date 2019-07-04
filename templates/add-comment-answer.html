@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask Mate | Add Comment</title>
+</head>
+<body>
+    <h1>Add comment to the answer</h1>
+    <a style="text-decoration: none" href="/">Home page</a>
+    <br>
+    <form action="/answer/{{ answer_id }}/new-comment" method="post">
+        <label for="comment_input">Enter your comment</label>
+        <textarea id="comment_input" name="message" rows="2" cols="50" required></textarea><br>
+        <input type="hidden" name="answer_id" value="{{ answer_id }}">
+        <button type="submit">Submit</button>
+    </form>
+    <br>
+    <a style="text-decoration: none" href="#" onclick="history.back();return false">Back</a>
+</body>
+</html>

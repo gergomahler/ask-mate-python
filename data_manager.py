@@ -235,16 +235,15 @@ def vote_down_answer(cursor, answer_id):
 
 
 @connection.connection_handler
-def get_comments_for_question(cursor, question_id):
+def get_comments(cursor):
     cursor.execute("""
-                    SELECT submission_time, message FROM comment
-                    WHERE question_id = %(question_id)s
+                    SELECT question_id, answer_id, submission_time, message FROM comment
                     ORDER BY submission_time DESC;
-                    """,
-                   {'question_id': question_id})
+                    """)
 
-    question_comments = cursor.fetchall()
-    return question_comments
+    comments = cursor.fetchall()
+
+    return comments
 
 
 @connection.connection_handler
@@ -254,6 +253,17 @@ def add_comment_to_question(cursor, request_form, question_id):
                     VALUES (%(question_id)s, %(message)s, %(submission_time)s, NULL)
                     """,
                    {'question_id': question_id,
+                    'message': request_form['message'],
+                    'submission_time': get_current_time()})
+
+
+@connection.connection_handler
+def add_comment_to_answer(cursor, request_form, answer_id):
+    cursor.execute("""
+                    INSERT INTO comment (answer_id, message, submission_time, edited_count)
+                    VALUES (%(answer_id)s, %(message)s, %(submission_time)s, NULL)
+                    """,
+                   {'answer_id': answer_id,
                     'message': request_form['message'],
                     'submission_time': get_current_time()})
 

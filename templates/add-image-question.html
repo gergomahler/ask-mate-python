@@ -8,9 +8,10 @@
     <h1>Add an image</h1>
     <a style="text-decoration: none" href="/">Home page</a>
     <br>
+    <br>
     <form action="/question/{{ question_id }}/new-image" method="post">
-        <label for="image_input">Enter the image address</label>
-        <textarea id="image_input" name="image" rows="5" cols="50" required></textarea><br>
+        <label for="image_input">Enter the image address</label><br>
+        <textarea id="image_input" name="image" rows="5" cols="50"></textarea><br>
         <input type="hidden" name="question_id" value="{{ question_id }}">
         <button type="submit">Submit</button>
     </form>

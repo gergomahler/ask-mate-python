@@ -32,8 +32,12 @@
                 <td>{{ question[0].view_number }}</td>
                 <td>{{ question[0].vote_number }}</td>
                 <td width="50%">{{ question[0].message }}</td>
-                <td><img src="{{ question[0].image }}" width="120" height="90" alt="image"><br>
-                    <a style="text-decoration: none" href="/question/{{ question[0].id }}/new-image">Add image</a></td>
+                <td>
+                    {% if question[0].image %}
+                        <img src="{{ question[0].image }}" width="120" height="90" alt="image"><br>
+                    {% endif %}
+                    <a style="text-decoration: none" href="/question/{{ question[0].id }}/new-image">Add image</a>
+                </td>
             </tr>
 
         </tbody>
@@ -97,8 +101,12 @@
                     <td>{{ answer.submission_time }}</td>
                     <td>{{ answer.vote_number }}</td>
                     <td width="60%">{{ answer.message }}</td>
-                    <td><img src="{{ answer.image }}" width="120" height="90" alt="image"><br>
-                    <a style="text-decoration: none" href="/answer/{{ answer.id }}/new-image">Add image</a></td>
+                    <td>
+                        {% if answer.image %}
+                        <img src="{{ answer.image }}" width="120" height="90" alt="image"><br>
+                        {% endif %}
+                    <a style="text-decoration: none" href="/answer/{{ answer.id }}/new-image">Add image</a>
+                    </td>
                     <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/edit">Edit</a></td>
                     <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/delete">Delete</a></td>
                     <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/vote-up">Vote Up</a></td>

@@ -28,6 +28,17 @@ def get_question_id_from_answer(cursor, answer_id):
 
 
 @connection.connection_handler
+def get_question_id_from_comment(cursor, comment_id):
+    cursor.execute("""
+                    SELECT question_id FROM comment
+                    WHERE id = %(comment_id)s
+                    """,
+                   {'comment_id': comment_id})
+    question_id = cursor.fetchone()
+    return question_id
+
+
+@connection.connection_handler
 def get_answer(cursor, answer_id):
     cursor.execute("""
                     SELECT * FROM answer
@@ -237,7 +248,7 @@ def vote_down_answer(cursor, answer_id):
 @connection.connection_handler
 def get_comments(cursor):
     cursor.execute("""
-                    SELECT question_id, answer_id, submission_time, message FROM comment
+                    SELECT id, question_id, answer_id, submission_time, message FROM comment
                     ORDER BY submission_time DESC;
                     """)
 
@@ -258,12 +269,13 @@ def add_comment_to_question(cursor, request_form, question_id):
 
 
 @connection.connection_handler
-def add_comment_to_answer(cursor, request_form, answer_id):
+def add_comment_to_answer(cursor, request_form, answer_id, question_id):
     cursor.execute("""
-                    INSERT INTO comment (answer_id, message, submission_time, edited_count)
-                    VALUES (%(answer_id)s, %(message)s, %(submission_time)s, NULL)
+                    INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
+                    VALUES (%(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, NULL)
                     """,
-                   {'answer_id': answer_id,
+                   {'question_id': question_id,
+                    'answer_id': answer_id,
                     'message': request_form['message'],
                     'submission_time': get_current_time()})
 
@@ -288,6 +300,15 @@ def add_image_to_answer(cursor, request_form, answer_id):
                     """,
                    {'answer_id': answer_id,
                     'image': request_form['image']})
+
+
+@connection.connection_handler
+def delete_comment(cursor, comment_id):
+    cursor.execute("""
+                    DELETE FROM comment
+                    WHERE id = %(comment_id)s
+                    """,
+                   {'comment_id': comment_id})
 
 
 def sort_questions(sort_by, order, questions):

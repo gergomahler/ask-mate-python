@@ -296,7 +296,7 @@ def add_image_to_answer(cursor, request_form, answer_id):
     cursor.execute("""
                     UPDATE answer
                     SET image = %(image)s
-                    WHERE id = %(answer_id)s
+                    WHERE id = %(answer_id)s;
                     """,
                    {'answer_id': answer_id,
                     'image': request_form['image']})
@@ -315,3 +315,29 @@ def sort_questions(sort_by, order, questions):
     order_by = order == 'Desc'
     questions = sorted(questions, key=lambda x: x[sort_by], reverse=order_by)
     return questions
+
+
+@connection.connection_handler
+def get_comment_by_id(cursor, comment_id):
+    cursor.execute("""
+                   SELECT id, question_id, answer_id, submission_time, message FROM comment
+                   WHERE id = %(comment_id)s;
+                   """,
+                   {'comment_id': comment_id})
+
+    comment = cursor.fetchone()
+
+    return comment
+
+
+@connection.connection_handler
+def edit_comment(cursor, request_form, comment_id):
+    cursor.execute("""
+                    UPDATE comment
+                    SET submission_time = %(submission_time)s,
+                        message = %(message)s,
+                        edited_count = edited_count + 1
+                    WHERE id = %(comment_id)s;
+                   """,
+                   {'submission_time': get_current_time(),
+                    'message': request_form['message']})

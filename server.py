@@ -167,6 +167,7 @@ def add_image_to_answer(answer_id):
     return redirect(f'/question/{question_id}')
 
 
+
 @app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
 def delete_comment(comment_id):
     if request.method == 'GET':
@@ -174,6 +175,17 @@ def delete_comment(comment_id):
 
     question_id = data_manager.get_question_id_from_comment(comment_id)
     data_manager.delete_comment(comment_id)
+
+    return redirect(f'/question/{question_id}')
+
+
+@app.route('/comments/<comment_id>/edit', methods=['GET', 'POST'])
+def edit_comment(comment_id):
+    if request.method == 'GET':
+        comment = data_manager.get_comment_by_id(comment_id)
+        return render_template('edit-comment.html', comment= comment)
+    data_manager.edit_comment(request.form, comment_id)
+    question_id = data_manager.get_question_id_from_comment(comment_id)
 
     return redirect(f'/question/{question_id}')
 

@@ -248,7 +248,7 @@ def vote_down_answer(cursor, answer_id):
 @connection.connection_handler
 def get_comments(cursor):
     cursor.execute("""
-                    SELECT id, question_id, answer_id, submission_time, message FROM comment
+                    SELECT * FROM comment
                     ORDER BY submission_time DESC;
                     """)
 
@@ -261,7 +261,7 @@ def get_comments(cursor):
 def add_comment_to_question(cursor, request_form, question_id):
     cursor.execute("""
                     INSERT INTO comment (question_id, message, submission_time, edited_count)
-                    VALUES (%(question_id)s, %(message)s, %(submission_time)s, NULL)
+                    VALUES (%(question_id)s, %(message)s, %(submission_time)s, 0)
                     """,
                    {'question_id': question_id,
                     'message': request_form['message'],

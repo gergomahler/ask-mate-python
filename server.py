@@ -167,7 +167,6 @@ def add_image_to_answer(answer_id):
     return redirect(f'/question/{question_id}')
 
 
-
 @app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
 def delete_comment(comment_id):
     if request.method == 'GET':

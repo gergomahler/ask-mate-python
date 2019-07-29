@@ -173,7 +173,8 @@ def edit_comment(comment_id):
         comment = data_manager.get_comment_by_id(comment_id)
         return render_template('edit-comment.html', comment= comment)
     data_manager.edit_comment(request.form, comment_id)
-    return redirect()
+    question_id = data_manager.get_question_id_from_comment(comment_id)
+    return redirect(f'/question/{question_id}')
 
 
 if __name__ == '__main__':

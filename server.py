@@ -167,6 +167,15 @@ def add_image_to_answer(answer_id):
     return redirect(f'/question/{question_id}')
 
 
+@app.route('/comments/<comment_id>/edit', methods=['GET', 'POST'])
+def edit_comment(comment_id):
+    if request.method == 'GET':
+        comment = data_manager.get_comment_by_id(comment_id)
+        return render_template('edit-comment.html', comment= comment)
+    data_manager.edit_comment(request.form, comment_id)
+    return redirect()
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',

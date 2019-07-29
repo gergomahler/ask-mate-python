@@ -74,6 +74,7 @@
                     <tr>
                         <td>{{ comment.submission_time }}</td>
                         <td>{{ comment.message }}</td>
+                        <td><a href="/comments/{{ comment.id }}/edit">Edit</a></td>
                     </tr>
                 {% endif %}
             {% endfor %}
@@ -132,6 +133,7 @@
                                         <tr>
                                             <td>{{ comment.submission_time }}</td>
                                             <td>{{ comment.message }}</td>
+                                            <td><a href="/comments/{{ comment.id }}/edit">Edit</a></td>
                                         </tr>
                                     {% endif %}
                                 {% endfor %}

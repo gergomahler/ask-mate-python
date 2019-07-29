@@ -340,4 +340,5 @@ def edit_comment(cursor, request_form, comment_id):
                     WHERE id = %(comment_id)s;
                    """,
                    {'submission_time': get_current_time(),
-                    'message': request_form['message']})
+                    'message': request_form['message'],
+                    'comment_id': comment_id})

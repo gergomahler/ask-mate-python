@@ -13,8 +13,6 @@ def main_page():
 
 @app.route('/list')
 def list_all_questions():
-    print('Hello')
-    print('Hello')
     questions = data_manager.get_questions()
     if request.args.get('order') is not None:
         questions = data_manager.sort_questions(request.args.get('sort'), request.args.get('order'), questions)
@@ -174,8 +172,8 @@ def delete_comment(comment_id):
     if request.method == 'GET':
         return render_template('delete-comment-confirmation.html', comment_id=comment_id)
 
-    data_manager.delete_comment(comment_id)
     question_id = data_manager.get_question_id_from_comment(comment_id)
+    data_manager.delete_comment(comment_id)
 
     return redirect(f'/question/{question_id}')
 

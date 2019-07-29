@@ -34,7 +34,7 @@ def get_question_id_from_comment(cursor, comment_id):
                     WHERE id = %(comment_id)s
                     """,
                    {'comment_id': comment_id})
-    question_id = cursor.fetchone()
+    question_id = cursor.fetchone()['question_id']
     return question_id
 
 

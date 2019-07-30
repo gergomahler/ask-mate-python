@@ -7,8 +7,12 @@
 <body>
 
     <a style="text-decoration: none" href="/"><h1>Askmate</h1></a>
+    {% if logged_in %}
 
-    <a style="..." href="/registration">Register</a>
+    {% else %}
+        <a style="..." href="/registration">Register</a>
+        <a href="{{ url_for('login') }}">Login</a>
+    {% endif %}
     
     <form action="/search" method="get">
         <input type="text" name="q">

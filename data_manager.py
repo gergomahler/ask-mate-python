@@ -419,3 +419,5 @@ def create_user(cursor, request_form):
                     'password': passhash.hash_password(request_form['password']),
                     'registration_time': get_current_time()})
 
+
+

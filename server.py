@@ -224,6 +224,13 @@ def register_user():
     return redirect('/')
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('login.html')
+
+
+
 if __name__ == '__main__':
     app.run(
         host='0.0.0.0',

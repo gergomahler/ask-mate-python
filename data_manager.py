@@ -1,5 +1,6 @@
 from datetime import datetime
 import connection
+import passhash
 
 
 def get_current_time():
@@ -406,3 +407,15 @@ def delete_tag(cursor, question_id, tag_id):
                    """,
                    {'question_id': question_id,
                     'tag_id': tag_id})
+
+
+@connection.connection_handler
+def create_user(cursor, request_form):
+    cursor.execute("""
+                    INSERT INTO users (username, password, registration_time)
+                    VALUES (%(username)s, %(password)s, %(registration_time)s)
+                    """,
+                   {'username': request_form['username'],
+                    'password': passhash.hash_password(request_form['password']),
+                    'registration_time': get_current_time()})
+

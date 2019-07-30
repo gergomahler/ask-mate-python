@@ -370,7 +370,7 @@ def get_selected_tag_id(cursor, request_form):
                     SELECT id FROM tag
                     WHERE name = %(name)s
                     """,
-                   {'name': request_form['tag_name']})
+                   {'name': request_form})
 
     tag_id = cursor.fetchone()['id']
 

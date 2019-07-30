@@ -34,7 +34,7 @@ def show_question_details(question_id):
     question = data_manager.get_question_details(question_id)
     comments = data_manager.get_comments()
     answers = data_manager.get_answers_for_question(question_id)
-    tags = data_manager.get_tags(question_id)
+    tags = data_manager.get_tags_by_question_id(question_id)
     data_manager.update_view_number(question_id)
 
     return render_template('question.html', question=question, comments=comments, answers=answers, tags=tags)
@@ -202,7 +202,13 @@ def add_new_tag(question_id):
         tags = data_manager.get_tags()
         return render_template('add-tag.html', question_id=question_id, tags=tags)
 
-    tag_id = data_manager.get_selected_tag_id(request.form)
+    if request.form['new-tag']:
+        data_manager.create_new_tag(request.form)
+        tag_id = data_manager.get_selected_tag_id(request.form['new-tag'])
+        data_manager.add_tag_to_question(question_id, tag_id)
+        return redirect(f'/question/{question_id}')
+
+    tag_id = data_manager.get_selected_tag_id(request.form['tag_name'])
     data_manager.add_tag_to_question(question_id, tag_id)
 
     return redirect(f'/question/{question_id}')

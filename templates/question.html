@@ -11,8 +11,14 @@
 
     <a style="text-decoration: none" href="/">Home page</a>
     <br>
+    {% if tags %}
+    Tags:
     <br>
-
+    {% for tag in tags %}
+    {{ tag.name }}<a href="{{ url_for('delete_tag',question_id=question[0].id, tag_id=tag.id) }}">X</a>
+    {% endfor %}
+    {% endif %}
+    <br>
     <table cellpadding="8" width="90%">
     <colgroup>
         <col style="background-color: orange" span="6">

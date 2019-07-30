@@ -34,9 +34,10 @@ def show_question_details(question_id):
     question = data_manager.get_question_details(question_id)
     comments = data_manager.get_comments()
     answers = data_manager.get_answers_for_question(question_id)
+    tags = data_manager.get_tags(question_id)
     data_manager.update_view_number(question_id)
 
-    return render_template('question.html', question=question, comments=comments, answers=answers)
+    return render_template('question.html', question=question, comments=comments, answers=answers, tags=tags)
 
 
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
@@ -186,6 +187,12 @@ def edit_comment(comment_id):
     data_manager.edit_comment(request.form, comment_id)
     question_id = data_manager.get_question_id_from_comment(comment_id)
 
+    return redirect(f'/question/{question_id}')
+
+
+@app.route('/question/<question_id>/tag/<tag_id>/delete')
+def delete_tag(question_id, tag_id):
+    data_manager.delete_tag(question_id, tag_id)
     return redirect(f'/question/{question_id}')
 
 

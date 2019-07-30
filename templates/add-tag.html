@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Askmate | Add tag</title>
+</head>
+<body>
+    <h1>Choose from existing tags or create a new one</h1>
+    <a style="text-decoration: none" href="/">Home page</a>
+    <br>
+    <br>
+    <form action="/question/{{ question_id }}/new-tag" method="post">
+        <label for="tags">Choose a tag</label>
+        <select id="tags" name="tag_name">
+            {% for tag in tags %}
+                <option name="tag_name">{{ tag.name }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Add tag</button>
+    </form>
+    <br>
+    <form action="/question/{{ question_id }}/new-tag" method="post">
+        <label for="new-tag">Create a new tag</label>
+        <textarea id="new-tag" name="new-tag" rows="1" cols="15" required></textarea>
+        <button type="submit">Create tag</button>
+    </form>
+</body>
+</html>

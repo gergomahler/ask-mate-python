@@ -182,9 +182,21 @@ def delete_comment(comment_id):
 def edit_comment(comment_id):
     if request.method == 'GET':
         comment = data_manager.get_comment_by_id(comment_id)
-        return render_template('edit-comment.html', comment= comment)
+        return render_template('edit-comment.html', comment=comment)
     data_manager.edit_comment(request.form, comment_id)
     question_id = data_manager.get_question_id_from_comment(comment_id)
+
+    return redirect(f'/question/{question_id}')
+
+
+@app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
+def add_new_tag(question_id):
+    if request.method == 'GET':
+        tags = data_manager.get_tags()
+        return render_template('add-tag.html', question_id=question_id, tags=tags)
+
+    tag_id = data_manager.get_selected_tag_id(request.form)
+    data_manager.add_tag_to_question(question_id, tag_id)
 
     return redirect(f'/question/{question_id}')
 

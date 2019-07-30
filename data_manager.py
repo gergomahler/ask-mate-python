@@ -342,3 +342,46 @@ def edit_comment(cursor, request_form, comment_id):
                    {'submission_time': get_current_time(),
                     'message': request_form['message'],
                     'comment_id': comment_id})
+
+
+@connection.connection_handler
+def get_tags(cursor):
+    cursor.execute("""
+                    SELECT * FROM tag
+                    """)
+
+    tags = cursor.fetchall()
+
+    return tags
+
+
+@connection.connection_handler
+def create_new_tag(cursor, request_form):
+    cursor.execute("""
+                    INSERT INTO tag (name)
+                    VALUES (%(name)s)
+                    """,
+                   {'name': request_form['new-tag']})
+
+
+@connection.connection_handler
+def get_selected_tag_id(cursor, request_form):
+    cursor.execute("""
+                    SELECT id FROM tag
+                    WHERE name = %(name)s
+                    """,
+                   {'name': request_form['tag_name']})
+
+    tag_id = cursor.fetchone()['id']
+
+    return tag_id
+
+
+@connection.connection_handler
+def add_tag_to_question(cursor, question_id, tag_id):
+    cursor.execute("""
+                    INSERT INTO question_tag (question_id, tag_id)
+                    VALUES (%(question_id)s, %(tag_id)s)
+                    """,
+                   {'question_id': question_id,
+                    'tag_id': tag_id})

@@ -10,7 +10,7 @@ app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 @app.route('/')
 def main_page():
     questions = data_manager.get_latest_questions()
-    if session.get('username', default=None):
+    if session.get('username', None):
         return render_template('list.html', questions=questions, link=True, username=session['username'])
 
     return render_template('list.html', questions=questions, link=True)
@@ -30,7 +30,7 @@ def add_question():
     if request.method == 'GET':
         return render_template('add-question.html')
 
-    question_id = data_manager.add_new_question(request.form)
+    question_id = data_manager.add_new_question(request.form, session['username'])
     return redirect(f'/question/{question_id}')
 
 
@@ -50,7 +50,7 @@ def add_answer(question_id):
     if request.method == 'GET':
         return render_template('new-answer.html', question_id=question_id)
 
-    data_manager.add_new_answer(request.form, question_id)
+    data_manager.add_new_answer(request.form, question_id, session['username'])
 
     return redirect(f'/question/{question_id}')
 
@@ -135,7 +135,7 @@ def add_comment_to_question(question_id):
     if request.method == 'GET':
         return render_template('add-comment-question.html', question_id=question_id)
 
-    data_manager.add_comment_to_question(request.form, question_id)
+    data_manager.add_comment_to_question(request.form, question_id, session['username'])
 
     return redirect(f'/question/{question_id}')
 
@@ -146,7 +146,7 @@ def add_comment_to_answer(answer_id):
         return render_template('add-comment-answer.html', answer_id=answer_id)
 
     question_id = data_manager.get_question_id_from_answer(answer_id)
-    data_manager.add_comment_to_answer(request.form, answer_id, question_id)
+    data_manager.add_comment_to_answer(request.form, answer_id, question_id, session['username'])
 
     return redirect(f'/question/{question_id}')
 
@@ -246,6 +246,7 @@ def login():
 def logout():
     session.pop('username', None)
     return redirect(url_for('main_page'))
+
 
 if __name__ == '__main__':
     app.run(

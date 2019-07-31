@@ -44,7 +44,9 @@
     </form>
 
     <br>
-    <a style="text-decoration: none" href="/ask-question">Ask question</a>
+    {% if username %}
+        <a style="text-decoration: none" href="/ask-question">Ask question</a>
+    {% endif %}
 
 
     <br>

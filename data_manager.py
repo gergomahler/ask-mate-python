@@ -85,14 +85,28 @@ def get_answers_for_question(cursor, question_id):
 
 
 @connection.connection_handler
-def add_new_question(cursor, request_form):
+def get_user_id_from_username(cursor, username):
     cursor.execute("""
-                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image)
-                    VALUES (%(submission_time)s, 0, 0, %(title)s, %(message)s, NULL);
+                    SELECT id FROM users
+                    WHERE username=%(username)s
+                    """,
+                   {'username': username})
+
+    user_id = cursor.fetchone()['id']
+
+    return user_id
+
+
+@connection.connection_handler
+def add_new_question(cursor, request_form, username):
+    cursor.execute("""
+                    INSERT INTO question (submission_time, view_number, vote_number, title, message, image, user_id)
+                    VALUES (%(submission_time)s, 0, 0, %(title)s, %(message)s, NULL, %(user_id)s)
                    """,
                    {'title': request_form['Title'],
                     'message': request_form['Message'],
-                    'submission_time': get_current_time()})
+                    'submission_time': get_current_time(),
+                    'user_id': get_user_id_from_username(username)})
     cursor.execute("""
                    SELECT id FROM question
                    WHERE message = %(message)s AND title = %(title)s;
@@ -104,14 +118,15 @@ def add_new_question(cursor, request_form):
 
 
 @connection.connection_handler
-def add_new_answer(cursor, request_form, question_id):
+def add_new_answer(cursor, request_form, question_id, username):
     cursor.execute("""
-                    INSERT INTO answer (submission_time, vote_number, question_id, message, image)
-                    VALUES (%(submission_time)s, 0, %(question_id)s, %(message)s, NULL)
+                    INSERT INTO answer (submission_time, vote_number, question_id, message, image, user_id)
+                    VALUES (%(submission_time)s, 0, %(question_id)s, %(message)s, NULL, %(user_id)s)
                    """,
                    {'question_id': question_id,
                     'message': request_form['Message'],
-                    'submission_time': get_current_time()})
+                    'submission_time': get_current_time(),
+                    'user_id': get_user_id_from_username(username)})
 
 
 @connection.connection_handler
@@ -259,26 +274,28 @@ def get_comments(cursor):
 
 
 @connection.connection_handler
-def add_comment_to_question(cursor, request_form, question_id):
+def add_comment_to_question(cursor, request_form, question_id, username):
     cursor.execute("""
-                    INSERT INTO comment (question_id, message, submission_time, edited_count)
-                    VALUES (%(question_id)s, %(message)s, %(submission_time)s, 0)
+                    INSERT INTO comment (question_id, message, submission_time, edited_count, user_id)
+                    VALUES (%(question_id)s, %(message)s, %(submission_time)s, 0, %(user_id)s)
                     """,
                    {'question_id': question_id,
                     'message': request_form['message'],
-                    'submission_time': get_current_time()})
+                    'submission_time': get_current_time(),
+                    'user_id': get_user_id_from_username(username)})
 
 
 @connection.connection_handler
-def add_comment_to_answer(cursor, request_form, answer_id, question_id):
+def add_comment_to_answer(cursor, request_form, answer_id, question_id, username):
     cursor.execute("""
-                    INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count)
-                    VALUES (%(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, NULL)
+                    INSERT INTO comment (question_id, answer_id, message, submission_time, edited_count, user_id)
+                    VALUES (%(question_id)s, %(answer_id)s, %(message)s, %(submission_time)s, NULL, %(user_id)s)
                     """,
                    {'question_id': question_id,
                     'answer_id': answer_id,
                     'message': request_form['message'],
-                    'submission_time': get_current_time()})
+                    'submission_time': get_current_time(),
+                    'user_id': get_user_id_from_username(username)})
 
 
 @connection.connection_handler
@@ -429,3 +446,6 @@ def find_user(cursor, request_form):
                    {'username': request_form['username']})
     user = cursor.fetchone()
     return user
+
+
+

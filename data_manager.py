@@ -420,4 +420,12 @@ def create_user(cursor, request_form):
                     'registration_time': get_current_time()})
 
 
-
+@connection.connection_handler
+def find_user(cursor, request_form):
+    cursor.execute("""
+                    SELECT username, password FROM users
+                    WHERE username = %(username)s 
+                   """,
+                   {'username': request_form['username']})
+    user = cursor.fetchone()
+    return user

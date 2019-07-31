@@ -10,8 +10,14 @@
     {% if logged_in %}
 
     {% else %}
-        <a style="..." href="/registration">Register</a>
-        <a href="{{ url_for('login') }}">Login</a>
+
+        {% if username %}
+            <p>You are logged in as {{ username }}</p>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a style="..." href="/registration">Register</a>
+            <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
     {% endif %}
     
     <form action="/search" method="get">

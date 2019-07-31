@@ -1,13 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for
-
+from flask import Flask, render_template, request, redirect, url_for, session, escape
+import passhash
 import data_manager
 
 app = Flask(__name__)
+
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 
 @app.route('/')
 def main_page():
     questions = data_manager.get_latest_questions()
+    if session.get('username', default=None):
+        return render_template('list.html', questions=questions, link=True, username=session['username'])
+
     return render_template('list.html', questions=questions, link=True)
 
 
@@ -227,9 +232,20 @@ def register_user():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template('login.html')
+        return render_template('login.html', error_message=False)
+
+    user = data_manager.find_user(request.form)
+    if user and passhash.verify_password(request.form['password'], user['password']):
+        session['username'] = request.form['username']
+        return redirect(url_for('main_page'))
+
+    return render_template('login.html', error_message=True)
 
 
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('main_page'))
 
 if __name__ == '__main__':
     app.run(

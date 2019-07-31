@@ -237,6 +237,7 @@ def login():
     user = data_manager.find_user(request.form)
     if user and passhash.verify_password(request.form['password'], user['password']):
         session['username'] = request.form['username']
+        session['id'] = data_manager.get_user_id_from_username(request.form['username'])
         return redirect(url_for('main_page'))
 
     return render_template('login.html', error_message=True)

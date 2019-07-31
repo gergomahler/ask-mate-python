@@ -43,27 +43,35 @@
                     {% if question[0].image %}
                         <img src="{{ question[0].image }}" width="120" height="90" alt="image"><br>
                     {% endif %}
-                    <a style="text-decoration: none" href="/question/{{ question[0].id }}/new-image">Add image</a>
+                    {% if user_id == question[0].user_id %}
+                        <a style="text-decoration: none" href="/question/{{ question[0].id }}/new-image">Add image</a>
+                    {% endif %}
                 </td>
             </tr>
 
         </tbody>
     </table>
     <br>
-    <a style="text-decoration: none" href="/question/{{ question[0].id }}/new-answer">Answer the question</a>
+    {% if user_id == question[0].user_id %}
+        <a style="text-decoration: none" href="/question/{{ question[0].id }}/edit">Edit question</a>
 
-    <a style="text-decoration: none" href="/question/{{ question[0].id }}/edit">Edit question</a>
+        <a style="text-decoration: none" href="/question/{{ question[0].id }}/delete">Delete question</a>
 
-    <a style="text-decoration: none" href="/question/{{ question[0].id }}/delete">Delete question</a>
+        <a style="..." href="/question/{{ question[0].id }}/new-tag">Add tag</a>
 
-    <a style="text-decoration: none" href="/question/{{ question[0].id }}/vote-up">Vote Up</a>
+    {% endif %}
 
-    <a style="text-decoration: none" href="/question/{{ question[0].id }}/vote-down">Vote Down</a>
+    {% if user_id %}
 
-    <a style="text-decoration: none" href="/question/{{ question[0].id }}/new-comment">Add comment</a>
+        <a style="text-decoration: none" href="/question/{{ question[0].id }}/new-answer">Answer the question</a>
 
-    <a style="..." href="/question/{{ question[0].id }}/new-tag">Add tag</a>
+        <a style="text-decoration: none" href="/question/{{ question[0].id }}/vote-up">Vote Up</a>
 
+        <a style="text-decoration: none" href="/question/{{ question[0].id }}/vote-down">Vote Down</a>
+
+        <a style="text-decoration: none" href="/question/{{ question[0].id }}/new-comment">Add comment</a>
+
+    {% endif %}
     <br>
 
     <table cellpadding="8" width="43%">
@@ -86,10 +94,12 @@
                         <td>{% if comment.edited_count != 0 %}
                             Edited {{ comment.edited_count }} times
                             {% endif %}</td>
-                        <td><a href="/comments/{{ comment.id }}/edit">Edit</a></td>
-                        <td><a href="/comments/{{ comment.id }}/delete">
-                        <button style="font-size:24px"><i class="fa fa-trash"></i></button></a>
-                        </td>
+                        {% if user_id == comment.user_id %}
+                            <td><a href="/comments/{{ comment.id }}/edit">Edit</a></td>
+                            <td><a href="/comments/{{ comment.id }}/delete">
+                            <button style="font-size:24px"><i class="fa fa-trash"></i></button></a>
+                            </td>
+                        {% endif %}
                     </tr>
                 {% endif %}
             {% endfor %}
@@ -121,13 +131,19 @@
                         {% if answer.image %}
                         <img src="{{ answer.image }}" width="120" height="90" alt="image"><br>
                         {% endif %}
-                    <a style="text-decoration: none" href="/answer/{{ answer.id }}/new-image">Add image</a>
+                        {% if user_id == answer.user_id %}
+                            <a style="text-decoration: none" href="/answer/{{ answer.id }}/new-image">Add image</a>
+                        {% endif %}
                     </td>
-                    <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/edit">Edit</a></td>
-                    <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/delete">Delete</a></td>
-                    <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/vote-up">Vote Up</a></td>
-                    <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/vote-down">Vote Down</a></td>
-                    <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/new-comment">Add Comment</a></td>
+                    {% if user_id == answer.user_id %}
+                        <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/edit">Edit</a></td>
+                        <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/delete">Delete</a></td>
+                    {% endif %}
+                    {% if user_id %}
+                        <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/vote-up">Vote Up</a></td>
+                        <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/vote-down">Vote Down</a></td>
+                        <td><a style="text-decoration: none" href="/answer/{{ answer.id }}/new-comment">Add Comment</a></td>
+                    {% endif %}
                 </tr>
                 <tr>
                     <td colspan="4">
@@ -148,11 +164,12 @@
                                         <tr>
                                             <td>{{ comment.submission_time }}</td>
                                             <td>{{ comment.message }}</td>
-                                            <td><a href="/comments/{{ comment.id }}/edit">Edit</a></td>
-                                            <td><a href="/comments/{{ comment.id }}/delete">
-                                                <button style="font-size:24px"><i class="fa fa-trash"></i></button></a>
-                                            </td>
-
+                                            {% if user_id == comment.user_id %}
+                                                <td><a href="/comments/{{ comment.id }}/edit">Edit</a></td>
+                                                <td><a href="/comments/{{ comment.id }}/delete">
+                                                    <button style="font-size:24px"><i class="fa fa-trash"></i></button></a>
+                                                </td>
+                                            {% endif %}
                                         </tr>
                                     {% endif %}
                                 {% endfor %}

@@ -74,7 +74,7 @@ def update_view_number(cursor, question_id):
 @connection.connection_handler
 def get_answers_for_question(cursor, question_id):
     cursor.execute("""
-                    SELECT id, submission_time, vote_number, message, image FROM answer
+                    SELECT * FROM answer
                     WHERE question_id = %(question_id)s
                     ORDER BY submission_time DESC;
                    """,

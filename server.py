@@ -42,7 +42,8 @@ def show_question_details(question_id):
     tags = data_manager.get_tags_by_question_id(question_id)
     data_manager.update_view_number(question_id)
 
-    return render_template('question.html', question=question, comments=comments, answers=answers, tags=tags)
+    return render_template('question.html', question=question, comments=comments,
+                           answers=answers, tags=tags, user_id=session.get('id', None))
 
 
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
@@ -246,6 +247,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
+    session.pop('id', None)
     return redirect(url_for('main_page'))
 
 

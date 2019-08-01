@@ -11,10 +11,10 @@ def are_you_logged_in(function):
     def wrap(*args, **kwargs):
         if session.get('username'):
 
-            func = function(*args, **kwargs)
-            return func
+            return function(*args, **kwargs)
         else:
             return app.make_response(('No Permission', 403))
+
     wrap.__name__ = function.__name__
     return wrap
 
@@ -27,6 +27,7 @@ def are_you_the_owner(what, id_):
             return False
     else:
         return False
+
 
 @app.route('/')
 def main_page():
@@ -102,29 +103,37 @@ def edit_question(question_id):
 
 @app.route('/answer/<answer_id>/edit', methods=['GET', 'POST'])
 def edit_answer(answer_id):
-    if request.method == 'GET':
-        answer = data_manager.get_answer(answer_id)
-        return render_template('edit-answer.html', answer=answer)
+    if are_you_the_owner('answer', answer_id):
+        if request.method == 'GET':
+            answer = data_manager.get_answer(answer_id)
+            return render_template('edit-answer.html', answer=answer)
 
-    data_manager.edit_answer(request.form, answer_id)
-    question_id = data_manager.get_question_id_from_answer(answer_id)
+        data_manager.edit_answer(request.form, answer_id)
+        question_id = data_manager.get_question_id_from_answer(answer_id)
 
-    return redirect(f'/question/{ question_id }')
+        return redirect(f'/question/{question_id}')
+    else:
+        return app.make_response(('No permission', 403))
 
 
 @app.route('/question/<question_id>/delete')
 def delete_a_question(question_id):
-    data_manager.delete_question(question_id)
+    if are_you_the_owner('question', question_id):
+        data_manager.delete_question(question_id)
 
-    return redirect('/')
-
+        return redirect('/')
+    else:
+        return app.make_response(('No permission', 403))
 
 @app.route('/answer/<answer_id>/delete')
 def delete_an_answer(answer_id):
-    question_id = data_manager.get_question_id_from_answer(answer_id)
-    data_manager.delete_answer(answer_id)
+    if are_you_the_owner('answer', answer_id):
+        question_id = data_manager.get_question_id_from_answer(answer_id)
+        data_manager.delete_answer(answer_id)
 
-    return redirect(f'/question/{question_id}')
+        return redirect(f'/question/{question_id}')
+    else:
+        return app.make_response(('No permission', 403))
 
 
 @app.route('/question/<question_id>/vote-up')
@@ -208,33 +217,41 @@ def add_image_to_answer(answer_id):
 
 @app.route('/comments/<comment_id>/delete', methods=['GET', 'POST'])
 def delete_comment(comment_id):
-    if request.method == 'GET':
-        return render_template('delete-comment-confirmation.html', comment_id=comment_id)
+    if are_you_the_owner('comment', comment_id):
+        if request.method == 'GET':
+            return render_template('delete-comment-confirmation.html', comment_id=comment_id)
 
-    question_id = data_manager.get_question_id_from_comment(comment_id)
-    data_manager.delete_comment(comment_id)
+        question_id = data_manager.get_question_id_from_comment(comment_id)
+        data_manager.delete_comment(comment_id)
 
-    return redirect(f'/question/{question_id}')
+        return redirect(f'/question/{question_id}')
+    else:
+        return app.make_response(('No permission', 403))
 
 
 @app.route('/comments/<comment_id>/edit', methods=['GET', 'POST'])
 def edit_comment(comment_id):
-    if request.method == 'GET':
-        comment = data_manager.get_comment_by_id(comment_id)
-        return render_template('edit-comment.html', comment=comment)
-    data_manager.edit_comment(request.form, comment_id)
-    question_id = data_manager.get_question_id_from_comment(comment_id)
+    if are_you_the_owner('comment', comment_id):
+        if request.method == 'GET':
+            comment = data_manager.get_comment_by_id(comment_id)
+            return render_template('edit-comment.html', comment=comment)
+        data_manager.edit_comment(request.form, comment_id)
+        question_id = data_manager.get_question_id_from_comment(comment_id)
 
-    return redirect(f'/question/{question_id}')
+        return redirect(f'/question/{question_id}')
+    else:
+        return app.make_response(('No permission', 403))
 
 
 @app.route('/question/<question_id>/tag/<tag_id>/delete')
+@are_you_logged_in
 def delete_tag(question_id, tag_id):
     data_manager.delete_tag(question_id, tag_id)
     return redirect(f'/question/{question_id}')
 
 
 @app.route('/question/<question_id>/new-tag', methods=['GET', 'POST'])
+@are_you_logged_in
 def add_new_tag(question_id):
     if request.method == 'GET':
         tags = data_manager.get_tags()

@@ -1,6 +1,7 @@
 from datetime import datetime
 import connection
 import passhash
+from psycopg2 import sql
 
 
 def get_current_time():
@@ -450,12 +451,11 @@ def find_user(cursor, request_form):
 
 @connection.connection_handler
 def get_user_id_from_qac(cursor, what, id_):
-    cursor.execute("""
-                    SELECT user_id FROM %(what)s
-                    WHERE id=%(id)
-                    """,
-                   {'what': what,
-                    'id': id_})
+    query = sql.SQL("select {} from {} where id={}").format(
+    sql.Identifier(what, "user_id"),
+    sql.Identifier(what),
+    sql.Literal(id_))
+    cursor.execute(query)
 
     user_id = cursor.fetchone()['user_id']
 

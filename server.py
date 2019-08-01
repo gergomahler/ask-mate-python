@@ -19,6 +19,15 @@ def are_you_logged_in(function):
     return wrap
 
 
+def are_you_the_owner(what, id_):
+    if session.get('username'):
+        if session['id'] == data_manager.get_user_id_from_qac(what, id_):
+            return True
+        else:
+            return False
+    else:
+        return False
+
 @app.route('/')
 def main_page():
     questions = data_manager.get_latest_questions()
@@ -79,13 +88,16 @@ def search():
 
 @app.route('/question/<question_id>/edit', methods=['GET', 'POST'])
 def edit_question(question_id):
-    question = data_manager.get_question_details(question_id)
-    if request.method == 'GET':
-        return render_template('edit-question.html', question_id=question_id, question=question)
+    if are_you_the_owner('question', question_id):
+        question = data_manager.get_question_details(question_id)
+        if request.method == 'GET':
+            return render_template('edit-question.html', question_id=question_id, question=question)
 
-    data_manager.edit_question(request.form, question_id)
+        data_manager.edit_question(request.form, question_id)
 
-    return redirect(f'/question/{question_id}')
+        return redirect(f'/question/{question_id}')
+    else:
+        return app.make_response(('No permission', 403))
 
 
 @app.route('/answer/<answer_id>/edit', methods=['GET', 'POST'])

@@ -208,7 +208,7 @@ def add_new_tag(question_id):
         tags = data_manager.get_tags()
         return render_template('add-tag.html', question_id=question_id, tags=tags)
 
-    if request.form['new-tag']:
+    if request.form.get('new-tag', None):
         data_manager.create_new_tag(request.form)
         tag_id = data_manager.get_selected_tag_id(request.form['new-tag'])
         data_manager.add_tag_to_question(question_id, tag_id)

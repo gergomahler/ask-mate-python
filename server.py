@@ -272,9 +272,11 @@ def add_new_tag(question_id):
 @app.route('/registration', methods=['GET', 'POST'])
 def register_user():
     if request.method == 'GET':
-        return render_template('registration.html')
-
-    data_manager.create_user(request.form)
+        return render_template('registration.html', username_is_used=False)
+    try:
+        data_manager.create_user(request.form)
+    except:
+        return render_template('registration.html', username_is_used=True)
 
     return redirect('/')
 

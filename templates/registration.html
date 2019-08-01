@@ -8,6 +8,9 @@
     <h1>Create a new user</h1>
     <a style="text-decoration: none" href="/">Home page</a>
     <br>
+    {% if username_is_used %}
+        <h3>Username already exists.</h3>
+    {% endif %}
     <form action="/registration", method="post">
         <label for="username">Username</label>
         <input type="text", id="username", name="username" required>

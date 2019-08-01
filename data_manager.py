@@ -448,4 +448,15 @@ def find_user(cursor, request_form):
     return user
 
 
+@connection.connection_handler
+def get_user_id_from_qac(cursor, what, id_):
+    cursor.execute("""
+                    SELECT user_id FROM %(what)s
+                    WHERE id=%(id)
+                    """,
+                   {'what': what,
+                    'id': id_})
 
+    user_id = cursor.fetchone()['user_id']
+
+    return user_id

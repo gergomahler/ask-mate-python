@@ -1,10 +1,22 @@
-from flask import Flask, render_template, request, redirect, url_for, session, escape
+from flask import Flask, render_template, request, redirect, url_for, session
 import passhash
 import data_manager
 
 app = Flask(__name__)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+
+def are_you_logged_in(function):
+    def wrap(*args, **kwargs):
+        if session.get('username'):
+
+            func = function(*args, **kwargs)
+            return func
+        else:
+            return app.make_response(('No Permission', 403))
+    wrap.__name__ = function.__name__
+    return wrap
 
 
 @app.route('/')
@@ -26,6 +38,7 @@ def list_all_questions():
 
 
 @app.route('/ask-question', methods=['GET', 'POST'])
+@are_you_logged_in
 def add_question():
     if request.method == 'GET':
         return render_template('add-question.html')
@@ -47,6 +60,7 @@ def show_question_details(question_id):
 
 
 @app.route('/question/<question_id>/new-answer', methods=['GET', 'POST'])
+@are_you_logged_in
 def add_answer(question_id):
     if request.method == 'GET':
         return render_template('new-answer.html', question_id=question_id)
@@ -102,6 +116,7 @@ def delete_an_answer(answer_id):
 
 
 @app.route('/question/<question_id>/vote-up')
+@are_you_logged_in
 def vote_up_question(question_id):
     data_manager.vote_up_question(question_id)
 
@@ -109,6 +124,7 @@ def vote_up_question(question_id):
 
 
 @app.route('/question/<question_id>/vote-down')
+@are_you_logged_in
 def vote_down_question(question_id):
     data_manager.vote_down_question(question_id)
 
@@ -116,6 +132,7 @@ def vote_down_question(question_id):
 
 
 @app.route('/answer/<answer_id>/vote-up')
+@are_you_logged_in
 def vote_up_answer(answer_id):
     data_manager.vote_up_answer(answer_id)
     question_id = data_manager.get_question_id_from_answer(answer_id)
@@ -124,6 +141,7 @@ def vote_up_answer(answer_id):
 
 
 @app.route('/answer/<answer_id>/vote-down')
+@are_you_logged_in
 def vote_down_answer(answer_id):
     data_manager.vote_down_answer(answer_id)
     question_id = data_manager.get_question_id_from_answer(answer_id)
@@ -132,6 +150,7 @@ def vote_down_answer(answer_id):
 
 
 @app.route('/question/<question_id>/new-comment', methods=['GET', 'POST'])
+@are_you_logged_in
 def add_comment_to_question(question_id):
     if request.method == 'GET':
         return render_template('add-comment-question.html', question_id=question_id)
@@ -142,6 +161,7 @@ def add_comment_to_question(question_id):
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=['GET', 'POST'])
+@are_you_logged_in
 def add_comment_to_answer(answer_id):
     if request.method == 'GET':
         return render_template('add-comment-answer.html', answer_id=answer_id)

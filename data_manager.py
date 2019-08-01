@@ -446,6 +446,3 @@ def find_user(cursor, request_form):
                    {'username': request_form['username']})
     user = cursor.fetchone()
     return user
-
-
-
